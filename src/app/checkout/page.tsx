@@ -15,9 +15,12 @@ import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import { useCart } from "../../context/CartContext";
+import { useRouter } from 'next/navigation';
+import { supabase } from '../../lib/supabaseClient';
 
 export default function CheckoutPage(): JSX.Element {
-  const { cartItems, getTotalPrice } = useCart();
+  const { cartItems, getTotalPrice, clearCart } = useCart();
+  const router = useRouter();
   
   const [formData, setFormData] = useState({
     email: "",
@@ -42,6 +45,61 @@ export default function CheckoutPage(): JSX.Element {
   const subtotal = getTotalPrice();
   const shipping = 100;
   const total = subtotal + shipping;
+
+  const handleTestOrder = async () => {
+    try {
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError) throw userError;
+      if (!user) {
+        alert("You must be logged in to place an order.");
+        router.push('/login');
+        return;
+      }
+
+      if (cartItems.length === 0) {
+        alert("Your cart is empty. Add items before placing an order.");
+        return;
+      }
+
+      // 1. Create the order
+      const { data: orderData, error: orderError } = await supabase
+        .from('orders')
+        .insert({
+          user_id: user.id,
+          total_amount: total,
+          status: 'confirmed',
+          order_date: new Date().toISOString(),
+        })
+        .select()
+        .single();
+
+      if (orderError) throw orderError;
+
+      // 2. Add order items
+      const orderItems = cartItems.map(item => ({
+        order_id: orderData.id,
+        product_id: item.id, // Assuming item.id is the product_id
+        quantity: item.quantity,
+        price: item.price,
+      }));
+
+      const { error: orderItemsError } = await supabase
+        .from('order_items')
+        .insert(orderItems);
+
+      if (orderItemsError) throw orderItemsError;
+
+      // 3. Clear the cart
+      clearCart();
+
+      alert("Test Order Placed Successfully!");
+      router.push('/orders'); // Redirect to user's orders page
+
+    } catch (error: any) {
+      console.error("Error placing test order:", error);
+      alert(`Failed to place test order: ${error.message || "Unknown error"}`);
+    }
+  };
 
   return (
     <>
@@ -284,6 +342,14 @@ export default function CheckoutPage(): JSX.Element {
             {/* Pay Now Button */}
             <Button className="w-full bg-yellow-400 text-black hover:bg-yellow-500 h-14 text-lg font-bold rounded-[8px]">
               Pay now
+            </Button>
+
+            {/* Test Order Button for Developers */}
+            <Button
+              onClick={handleTestOrder}
+              className="w-full bg-gray-300 text-black hover:bg-gray-400 h-14 text-lg font-bold rounded-[8px] mt-4"
+            >
+              Test Order (Dev Only)
             </Button>
           </div>
 
