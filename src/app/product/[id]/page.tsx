@@ -1,0 +1,232 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useCart } from "@/context/CartContext";
+import { NavigationBar } from "@/components/Navigation/NavigationBar";
+import { PlusIcon, MinusIcon } from "lucide-react";
+import { SkeletonCard } from "@/components/ui/skeleton-card"; // Assuming you have a SkeletonCard for loading
+import React from "react";
+
+interface Product {
+  id: string; // uuid
+  name: string;
+  description: string | null;
+  price: number;
+  stock: number | null;
+  created_at: string;
+  updated_at: string;
+  product_images: { image_url: string }[];
+}
+
+export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const [qty, setQty] = useState<number>(1);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const { addToCart } = useCart();
+  const router = useRouter();
+  const { id } = React.use(params) as { id: string }; // Get product ID from URL, unwrapped with use() - Next.js 13 App Router
+
+  const [productData, setProductData] = useState<Product | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      if (!id) {
+        setError("Product ID is missing.");
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(`/api/products?id=${id}`);
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        const data = await res.json();
+        if (data) {
+          setProductData(data);
+        } else {
+          setProductData(null);
+          setError("Product not found.");
+        }
+      } catch (e: any) {
+        setError(e.message || "Failed to fetch product.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [id]); // Re-fetch when ID changes
+
+  const gallery: { image_url: string }[] = productData?.product_images || [];
+
+  useEffect(() => {
+    // Reset activeIndex when productData changes
+    setActiveIndex(0);
+  }, [productData]);
+
+  const handleAddToCart = () => {
+    if (!productData) return;
+    for (let i = 0; i < qty; i++) {
+      addToCart({
+        id: productData.id,
+        name: productData.name,
+        price: productData.price,
+        category: "", // Add a default or retrieve actual category
+        image: productData.product_images?.[0]?.image_url || '/placeholder.png', // Use the first image for cart thumbnail
+      });
+    }
+  };
+
+  const handleBuyNow = () => {
+    if (!productData) return;
+    for (let i = 0; i < qty; i++) {
+      addToCart({
+        id: productData.id,
+        name: productData.name,
+        price: productData.price,
+        category: "", // Add a default or retrieve actual category
+        image: productData.product_images?.[0]?.image_url || '/placeholder.png',
+      });
+    }
+    router.push('/checkout');
+  };
+
+  if (loading) {
+    return (
+      <div>
+        <div className="grid grid-cols-2 gap-10 px-[100px] py-10 w-full max-w-7xl">
+          <div className="grid grid-cols-[120px_1fr] gap-6 items-start">
+            <div className="flex flex-col gap-4">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="h-[90px] w-[120px] rounded-[12px] bg-gray-200 animate-pulse" />
+              ))}
+            </div>
+            <div className="relative rounded-[16px] overflow-hidden bg-gray-200 animate-pulse w-full h-[520px]" />
+          </div>
+          <div>
+            <div className="h-8 bg-gray-200 animate-pulse w-3/4 mb-4 rounded" />
+            <div className="h-6 bg-gray-200 animate-pulse w-1/4 mb-6 rounded" />
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
+              <div className="w-12 h-6 bg-gray-200 animate-pulse rounded" />
+              <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
+            </div>
+            <div className="flex gap-4 mb-6">
+              <div className="flex-1 h-12 rounded-md bg-gray-200 animate-pulse" />
+              <div className="flex-1 h-12 rounded-md bg-gray-200 animate-pulse" />
+            </div>
+            <div className="border rounded-md mb-4 bg-gray-200 animate-pulse h-24" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div>
+        <div className="text-center">
+          <h1 className="text-3xl font-bold mb-4">Error</h1>
+          <p>{error}</p>
+          <button onClick={() => router.back()} className="mt-4 text-blue-500 hover:underline">Go Back</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!productData) {
+    return (
+      <div>
+        <div className="text-center">
+          <h1 className="text-3xl font-bold mb-4">Product Not Found</h1>
+          <p>The product you are looking for does not exist.</p>
+          <button onClick={() => router.push('/')} className="mt-4 text-blue-500 hover:underline">Go to Homepage</button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white w-full min-h-screen">
+      <div className="grid grid-cols-2 gap-10 px-[100px] py-10">
+        {/* Left: large image with vertical thumbnails */}
+        <div className="grid grid-cols-[120px_1fr] gap-6 items-start">
+          <div className="flex flex-col gap-4">
+            {gallery.map((image, idx) => (
+              <button
+                key={image.image_url}
+                onClick={() => setActiveIndex(idx)}
+                className={`h-[90px] w-[120px] rounded-[12px] overflow-hidden border ${
+                  activeIndex === idx ? "border-black" : "border-transparent"
+                }`}
+              >
+                <img src={image.image_url} alt={`thumb-${idx}`} className="w-full h-full object-cover" />
+              </button>
+            ))}
+          </div>
+          <div className="relative rounded-[16px] overflow-hidden bg-black/5">
+            <img src={gallery[activeIndex]?.image_url} alt="product" className="w-full h-[520px] object-cover" />
+          </div>
+        </div>
+
+        {/* Right: details */}
+        <div>
+          <h1 className="[font-family:'Gilroy-Bold-Bold',Helvetica] font-bold text-[#1e1e1e] text-[32px] leading-tight mb-2">
+            {productData.name}
+          </h1>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="text-[22px] font-semibold">₹{productData.price}</div>
+          </div>
+
+          <div className="flex items-center gap-3 mb-6">
+            <button
+              onClick={() => setQty(Math.max(1, qty - 1))}
+              className="w-10 h-10 rounded-full border"
+              aria-label="decrease"
+            >
+              -
+            </button>
+            <div className="w-12 text-center">{qty}</div>
+            <button
+              onClick={() => setQty(qty + 1)}
+              className="w-10 h-10 rounded-full border"
+              aria-label="increase"
+            >
+              +
+            </button>
+          </div>
+
+          <div className="flex gap-4 mb-6">
+            <button
+              className="flex-1 h-12 rounded-md bg-black text-white hover:bg-black/90 transition-colors"
+              onClick={handleAddToCart}
+            >
+              ADD TO CART
+            </button>
+            <button
+              className="flex-1 h-12 rounded-md bg-[#ffe000] hover:bg-[#ffe000]/90 transition-colors"
+              onClick={handleBuyNow}
+            >
+              BUY IT NOW
+            </button>
+          </div>
+
+          {/* Accordion for Description */}
+          {productData.description && (
+            <details className="border rounded-md mb-4" open>
+              <summary className="cursor-pointer select-none px-4 py-3 font-medium">Description</summary>
+              <div className="px-4 pb-4 text-sm text-black/80 leading-7">
+                {productData.description}
+              </div>
+            </details>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
