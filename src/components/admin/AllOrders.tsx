@@ -33,9 +33,9 @@ export default function AllOrders() {
         const data = await response.json();
         // console.log("Data from API:", data);
         setOrders(data);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Error fetching orders:", err);
-        setError(err.message || "Failed to fetch orders");
+        setError(err instanceof Error ? err.message : String(err));
       } finally {
         setLoading(false);
       }

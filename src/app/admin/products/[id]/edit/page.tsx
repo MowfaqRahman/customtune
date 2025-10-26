@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
 
@@ -29,7 +29,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchProductAndImages = async () => {
+  const fetchProductAndImages = useCallback(async () => {
     try {
       // Fetch product details
       const productResponse = await fetch(`/api/admin/products/${id}`);
@@ -48,16 +48,16 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
       }
       const imagesData: ProductImage[] = await imagesResponse.json();
       setExistingImages(imagesData);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     fetchProductAndImages();
-  }, [id]);
+  }, [fetchProductAndImages]);
 
   const handleNewImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -73,7 +73,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
 
   const uploadImageToStorage = async (file: File) => {
     const fileName = `${Date.now()}-${file.name}`;
-    const { data, error: uploadError } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from("product-images")
       .upload(fileName, file, { cacheControl: "3600", upsert: false });
 
@@ -103,8 +103,8 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
         }
 
         setExistingImages(existingImages.filter(img => img.id !== imageId));
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : String(err));
       } finally {
         setLoading(false);
       }
@@ -136,8 +136,8 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
         const errorData = await productResponse.json();
         throw new Error(errorData.error || `Error updating product: ${productResponse.statusText}`);
       }
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
       setLoading(false);
       return;
     }
@@ -161,8 +161,8 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
             throw new Error(errorData.error || `Error saving new image URL to database: ${imageInsertResponse.statusText}`);
           }
         }));
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : String(err));
         setLoading(false);
         return;
       }

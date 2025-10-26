@@ -29,7 +29,7 @@ export default function NewProductPage() {
 
   const uploadImage = async (file: File) => {
     const fileName = `${Date.now()}-${file.name}`;
-    const { data, error: uploadError } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from("product-images")
       .upload(fileName, file, { cacheControl: "3600", upsert: false });
 
@@ -72,8 +72,8 @@ export default function NewProductPage() {
       }
       const product = await productResponse.json();
       productId = product.id;
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
       setLoading(false);
       return;
     }
@@ -97,8 +97,8 @@ export default function NewProductPage() {
             throw new Error(errorData.error || `Error saving image URL to database: ${imageInsertResponse.statusText}`);
           }
         }));
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : String(err));
         setLoading(false);
         return;
       }

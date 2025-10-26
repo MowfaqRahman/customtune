@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { PlusIcon } from 'lucide-react';
 import { SkeletonCard } from '@/components/ui/skeleton-card';
 import { useCart } from '@/context/CartContext';
+import Image from 'next/image';
 
 interface Product {
   id: number;
@@ -85,10 +86,12 @@ export default function SearchResultsPage() {
               <CardContent className="p-0 flex flex-col h-full">
                 <Link href={`/product/${product.id}`} className="block no-underline">
                   <div className="relative w-full h-[180px] aspect-square bg-gray-100 rounded-t-[24.24px] flex items-center justify-center cursor-pointer">
-                    <img
+                    <Image
                       className="max-w-[180px] max-h-[110px] object-contain"
                       alt={product.name}
                       src={product.product_images?.[0]?.image_url || product.image || '/placeholder.png'}
+                      width={180} // Max width of the container
+                      height={110} // Max height of the image
                     />
                   </div>
                 </Link>

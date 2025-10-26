@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { UserProfileDropdown } from "./UserProfileDropdown";
+import Image from "next/image";
 
 const navigationItems = [
   { label: "Shop", hasDropdown: true, dropdownItems: [
@@ -33,10 +34,12 @@ export const NavigationBar = () => {
     <nav className="flex items-center justify-between px-[100px] py-8">
       <div className="flex items-center gap-12">
         <Link href="/">
-          <img
+          <Image
             src="/assets/hardtunelogo.png"
             alt="HARDTUNE"
             className="h-[110px] w-auto object-contain"
+            width={110} // Approximate height based on h-[110px]
+            height={110} // Approximate height based on h-[110px]
           />
       </Link>
 

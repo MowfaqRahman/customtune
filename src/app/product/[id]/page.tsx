@@ -3,10 +3,9 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
-import { NavigationBar } from "@/components/Navigation/NavigationBar";
-import { PlusIcon, MinusIcon } from "lucide-react";
-import { SkeletonCard } from "@/components/ui/skeleton-card"; // Assuming you have a SkeletonCard for loading
 import React from "react";
+import Image from "next/image";
+import { PlusIcon, MinusIcon } from "lucide-react";
 
 interface Product {
   id: string; // uuid
@@ -52,8 +51,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
           setProductData(null);
           setError("Product not found.");
         }
-      } catch (e: any) {
-        setError(e.message || "Failed to fetch product.");
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "Failed to fetch product.");
       } finally {
         setLoading(false);
       }
@@ -76,7 +75,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
         id: productData.id,
         name: productData.name,
         price: productData.price,
-        category: "", // Add a default or retrieve actual category
+        category: productData.category || "", // Use actual category or default
         image: productData.product_images?.[0]?.image_url || '/placeholder.png', // Use the first image for cart thumbnail
       });
     }
@@ -89,7 +88,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
         id: productData.id,
         name: productData.name,
         price: productData.price,
-        category: "", // Add a default or retrieve actual category
+        category: productData.category || "", // Use actual category or default
         image: productData.product_images?.[0]?.image_url || '/placeholder.png',
       });
     }
@@ -165,12 +164,12 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                   activeIndex === idx ? "border-black" : "border-transparent"
                 }`}
               >
-                <img src={image.image_url} alt={`thumb-${idx}`} className="w-full h-full object-cover" />
+                <Image src={image.image_url} alt={`thumb-${idx}`} width={120} height={90} className="w-full h-full object-cover" />
               </button>
             ))}
           </div>
           <div className="relative rounded-[16px] overflow-hidden bg-black/5">
-            <img src={gallery[activeIndex]?.image_url} alt="product" className="w-full h-[520px] object-cover" />
+            <Image src={gallery[activeIndex]?.image_url || '/placeholder.png'} alt="product" width={520} height={520} className="w-full h-[520px] object-cover" />
           </div>
         </div>
 
@@ -189,7 +188,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               className="w-10 h-10 rounded-full border"
               aria-label="decrease"
             >
-              -
+              <MinusIcon className="w-4 h-4" />
             </button>
             <div className="w-12 text-center">{qty}</div>
             <button
@@ -197,7 +196,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               className="w-10 h-10 rounded-full border"
               aria-label="increase"
             >
-              +
+              <PlusIcon className="w-4 h-4" />
             </button>
           </div>
 

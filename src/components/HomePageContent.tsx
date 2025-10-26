@@ -10,6 +10,7 @@ import { useCart } from "../context/CartContext";
 import { SkeletonCard } from "../components/ui/skeleton-card";
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabaseClient';
+import Image from "next/image";
 
 const categoryTabs = [
   { id: "wheels", label: "Wheels" },
@@ -54,7 +55,7 @@ export const HomePageContent = () => {
     fetchProducts();
   }, []);
 
-  const handleAddToCart = (product: any) => {
+  const handleAddToCart = (product: Product) => {
     addToCart({
       id: product.id,
       name: product.name,
@@ -69,10 +70,12 @@ export const HomePageContent = () => {
       <section className="relative px-[100px] py-12 mb-24">
         <div className="grid grid-cols-3 gap-6 h-[756px]">
           <div className="relative rounded-[10px] overflow-hidden bg-[#e0e0e0]">
-            <img
+            <Image
               className="absolute inset-0 w-full h-full object-cover"
               alt="Header left"
               src="/assets/header1.jpg"
+              width={756} // Approximate width of the container
+              height={756} // Approximate height of the container
             />
           </div>
           <div className="relative flex flex-col items-center justify-center bg-[url(/bg.svg)] bg-cover bg-center rounded-[10px]">
@@ -90,10 +93,12 @@ export const HomePageContent = () => {
           </div>
 
           <div className="relative rounded-[10px] overflow-hidden">
-            <img
+            <Image
               className="absolute inset-0 w-full h-full object-cover"
               alt="Header right"
               src="/assets/header2.jpg"
+              width={756} // Approximate width of the container
+              height={756} // Approximate height of the container
             />
           </div>
         </div>
@@ -141,10 +146,12 @@ export const HomePageContent = () => {
                 <CardContent className="p-0 flex flex-col h-full">
                   <Link href={`/product/${product.id}`} className="block no-underline">
                     <div className="relative w-full h-[180px] aspect-square bg-gray-100 rounded-t-[24.24px] flex items-center justify-center cursor-pointer">
-                      <img
+                      <Image
                         className="max-w-[180px] max-h-[110px] object-contain"
                         alt={product.name}
                         src={product.product_images?.[0]?.image_url || product.image || '/placeholder.png'}
+                        width={180}
+                        height={110}
                       />
                     </div>
                   </Link>
@@ -200,10 +207,12 @@ export const HomePageContent = () => {
         <div className="grid grid-cols-2 gap-16 items-center">
           <div className="relative">
             <div className="absolute -top-8 -left-8 w-[260px] h-[200px] bg-black/5 rounded-[24px]" />
-            <img
+            <Image
               src="/assets/f1.jpg"
               alt="Experience car"
               className="relative z-10 w-full max-w-[620px] h-[360px] object-cover rounded-[16px] shadow-[0_20px_40px_rgba(0,0,0,0.15)]"
+              width={620}
+              height={360}
             />
           </div>
           <div>
@@ -245,21 +254,27 @@ export const HomePageContent = () => {
             <div className="absolute -top-8 -right-10 w-[300px] h-[220px] bg-black/5 rounded-[24px]" />
             <div className="grid grid-cols-2 gap-4 items-center">
               <div className="space-y-4">
-                <img
+                <Image
                   src="/assets/header2.jpg"
                   alt="thumb 1"
                   className="w-[180px] h-[140px] object-cover rounded-[14px]"
+                  width={180}
+                  height={140}
                 />
-                <img
+                <Image
                   src="/assets/header1.jpg"
                   alt="thumb 2"
                   className="w-[180px] h-[180px] object-cover rounded-[14px]"
+                  width={180}
+                  height={180}
                 />
               </div>
-              <img
+              <Image
                 src="/assets/f2.jpg"
                 alt="materials feature"
                 className="w-[520px] h-[320px] object-cover rounded-[18px] shadow-[0_20px_40px_rgba(0,0,0,0.15)]"
+                width={520}
+                height={320}
               />
             </div>
           </div>
@@ -280,7 +295,7 @@ export const HomePageContent = () => {
               <CardContent className="p-0 flex flex-col h-full">
                 <Link href={`/product/${product.id}`} className="block no-underline">
                   <div className="relative w-full h-[180px] aspect-square bg-gray-100 rounded-t-[24.24px] flex items-center justify-center cursor-pointer">
-                    <img className="max-w-[180px] max-h-[110px] object-contain" alt={product.name} src={product.product_images?.[0]?.image_url || product.image || '/placeholder.png'} />
+                    <Image className="max-w-[180px] max-h-[110px] object-contain" alt={product.name} src={product.product_images?.[0]?.image_url || product.image || '/placeholder.png'} width={180} height={110} />
                   </div>
                 </Link>
                 <div className="p-[18px] flex flex-col flex-grow">
@@ -334,7 +349,7 @@ export const HomePageContent = () => {
               <CardContent className="p-0 flex flex-col h-full">
                 <Link href={`/product/${product.id}`} className="block no-underline">
                   <div className="relative w-full h-[180px] aspect-square bg-gray-100 rounded-t-[24.24px] flex items-center justify-center cursor-pointer">
-                    <img className="max-w-[180px] max-h-[110px] object-contain" alt={product.name} src={product.product_images?.[0]?.image_url || product.image || '/placeholder.png'} />
+                    <Image className="max-w-[180px] max-h-[110px] object-contain" alt={product.name} src={product.product_images?.[0]?.image_url || product.image || '/placeholder.png'} width={180} height={110} />
                   </div>
                 </Link>
                 <div className="p-[18px] flex flex-col flex-grow">
@@ -374,7 +389,7 @@ export const HomePageContent = () => {
               <CardContent className="p-0 flex flex-col h-full">
                 <Link href={`/product/${product.id}`} className="block no-underline">
                   <div className="relative w-full h-[180px] aspect-square bg-gray-100 rounded-t-[24.24px] flex items-center justify-center cursor-pointer">
-                    <img className="max-w-[180px] max-h-[110px] object-contain" alt={product.name} src={product.product_images?.[0]?.image_url || product.image || '/placeholder.png'} />
+                    <Image className="max-w-[180px] max-h-[110px] object-contain" alt={product.name} src={product.product_images?.[0]?.image_url || product.image || '/placeholder.png'} width={180} height={110} />
                   </div>
                 </Link>
                 <div className="p-[18px] flex flex-col flex-grow">
@@ -406,10 +421,12 @@ export const HomePageContent = () => {
       <section className="px-[100px] mb-24">
         <div className="grid grid-cols-2 gap-8">
           <div className="relative rounded-[16px] overflow-hidden bg-black/5">
-            <img
+            <Image
               src="/rectangle-1456.png"
               alt="Free shipping"
               className="w-full h-[260px] object-cover opacity-80"
+              width={600} // Approximate width
+              height={260}
             />
             <div className="absolute top-4 left-4">
               <span className="inline-block bg-[#ffeb3b] text-[12px] px-3 py-1 rounded-full uppercase tracking-wide">

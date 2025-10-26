@@ -12,6 +12,7 @@ import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import { useCart } from "@/context/CartContext";
+import Image from "next/image";
 
 
 export default function CartPage() {
@@ -62,10 +63,12 @@ export default function CartPage() {
                     <div className="flex items-center gap-4">
                       {/* Product Image */}
                       <div className="w-[120px] h-[120px] bg-gray-100 rounded-[10px] flex items-center justify-center flex-shrink-0">
-                        <img
+                        <Image
                           src={item.image}
                           alt={item.name}
-                          className="w-[80px] h-[80px] object-contain"
+                          width={80}
+                          height={80}
+                          className="object-contain"
                         />
                       </div>
 

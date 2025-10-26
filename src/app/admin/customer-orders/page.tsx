@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import Link from 'next/link';
 
 interface Profile {
   id: string;

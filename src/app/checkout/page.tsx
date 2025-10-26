@@ -2,8 +2,6 @@
 
 import {
   SearchIcon,
-  ShoppingCartIcon,
-  UserIcon,
   ChevronDownIcon,
   ClockIcon,
   CreditCardIcon,
@@ -17,6 +15,7 @@ import { Input } from "../../components/ui/input";
 import { useCart } from "../../context/CartContext";
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../lib/supabaseClient';
+import Image from "next/image";
 
 export default function CheckoutPage(): JSX.Element {
   const { cartItems, getTotalPrice, clearCart } = useCart();
@@ -113,9 +112,9 @@ export default function CheckoutPage(): JSX.Element {
       alert("Test Order Placed Successfully!");
       router.push('/orders'); // Redirect to user's orders page
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error placing test order:", error);
-      alert(`Failed to place test order: ${error.message || "Unknown error"}`);
+      alert(`Failed to place test order: ${error instanceof Error ? error.message : String(error)}`);
     }
   };
 
@@ -280,7 +279,7 @@ export default function CheckoutPage(): JSX.Element {
                       onChange={handleInputChange}
                       className="mr-3"
                     />
-                    <span className="font-medium">Razorpay Secure (UPI, Cards, Int'l Cards, Wallets)</span>
+                    <span className="font-medium">Razorpay Secure (UPI, Cards, Int&apos;l Cards, Wallets)</span>
                   </div>
                   
                   <div className="flex items-center gap-2 mb-3">
@@ -291,7 +290,7 @@ export default function CheckoutPage(): JSX.Element {
                   </div>
 
                   <p className="text-sm text-gray-600 mb-3">
-                    After clicking "Pay now", you will be redirected to Razorpay Secure (UPI, Cards, Int'l Cards, Wallets) to complete your purchase securely.
+                    After clicking &quot;Pay now&quot;, you will be redirected to Razorpay Secure (UPI, Cards, Int&apos;l Cards, Wallets) to complete your purchase securely.
                   </p>
 
                   <div className="flex items-center gap-2">
@@ -382,10 +381,12 @@ export default function CheckoutPage(): JSX.Element {
                   {cartItems.map((item) => (
                     <div key={item.id} className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-                        <img
+                        <Image
                           src={item.image}
                           alt={item.name}
-                          className="w-8 h-8 object-contain rounded-full"
+                          width={32} // Adjusted based on w-8, h-8 of original img
+                          height={32} // Adjusted based on w-8, h-8 of original img
+                          className="object-contain rounded-full"
                         />
                       </div>
                       <div className="flex-1">
@@ -432,6 +433,7 @@ export default function CheckoutPage(): JSX.Element {
           </div>
         </div>
       </div>
+
     </>
   );
 };

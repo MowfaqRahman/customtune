@@ -4,6 +4,20 @@ import { ChevronDown } from "lucide-react";
 import AllOrders from "@/components/admin/AllOrders";
 import { useState, useEffect } from "react";
 
+interface Profile {
+  username: string | null;
+  email: string | null;
+  role: string | null;
+}
+
+interface Order {
+  id: string;
+  total_amount: number;
+  status: string;
+  created_at: string;
+  profiles: Profile | null;
+}
+
 export default function AdminPage() {
   const [customers, setCustomers] = useState(0);
   const [income, setIncome] = useState(0);
@@ -35,7 +49,7 @@ export default function AdminPage() {
         const ordersData = await ordersResponse.json();
 
         const monthlyIncome: { [key: string]: number } = {};
-        ordersData.forEach((order: any) => {
+        ordersData.forEach((order: Order) => {
           const date = new Date(order.created_at);
           const month = date.toLocaleString("default", { month: "short" });
           monthlyIncome[month] = (monthlyIncome[month] || 0) + order.total_amount;

@@ -41,8 +41,8 @@ export default function AdminProductsPage() {
         })
       );
       setProducts(productsWithImages);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
     }
@@ -77,8 +77,8 @@ export default function AdminProductsPage() {
           throw new Error(`Error deleting product: ${productResponse.statusText}`);
         }
         setProducts(products.filter((product) => product.id !== id));
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : String(err));
       }
     }
   };
