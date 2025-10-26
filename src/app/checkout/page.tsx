@@ -56,6 +56,24 @@ export default function CheckoutPage(): JSX.Element {
         return;
       }
 
+      // Explicitly check for user profile before placing the order
+      const { data: profileCheck, error: profileCheckError } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('id', user.id);
+
+      if (profileCheckError) {
+        console.error("Error checking user profile before order placement:", profileCheckError);
+        alert("Failed to check user profile. Please try again.");
+        return;
+      }
+
+      if (!profileCheck || profileCheck.length === 0) {
+        alert("User profile not found. Please ensure your profile exists or re-register.");
+        router.push('/signup'); // Suggest re-registering if profile is missing
+        return;
+      }
+
       if (cartItems.length === 0) {
         alert("Your cart is empty. Add items before placing an order.");
         return;

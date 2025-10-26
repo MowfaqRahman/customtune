@@ -13,18 +13,23 @@ export const UserProfileDropdown = () => {
 
   useEffect(() => {
     const getProfile = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user }, error: userSessionError } = await supabase.auth.getUser();
+      if (userSessionError) {
+        console.error("Error getting user session:", userSessionError);
+      }
+
       if (user) {
-        const { data: profile, error } = await supabase
+        const { data: profileData, error: profileError } = await supabase
           .from('profiles')
           .select('role')
-          .eq('id', user.id)
-          .single();
+          .eq('id', user.id);
         
-        if (error) {
-          console.error("Error fetching profile:", error);
-        } else if (profile) {
-          setUserRole(profile.role);
+        if (profileError) {
+          console.error("Error fetching profile (getProfile): ", profileError);
+        } else if (profileData && profileData.length > 0) {
+          setUserRole(profileData[0].role);
+        } else {
+          console.log("No profile found for user (getProfile):", user.id);
         }
         setUser(user);
       }
@@ -35,16 +40,19 @@ export const UserProfileDropdown = () => {
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
         const fetchRole = async () => {
-          const { data: profile, error } = await supabase
+          const { data: profileData, error: profileError } = await supabase
             .from('profiles')
             .select('role')
-            .eq('id', session.user.id)
-            .single();
+            .eq('id', session.user.id);
 
-          if (error) {
-            console.error("Error fetching profile on auth change:", error);
-          } else if (profile) {
-            setUserRole(profile.role);
+          if (profileError) {
+            console.error("Error fetching profile on auth change (fetchRole): ", profileError);
+            console.log("Full error object on auth change:", JSON.stringify(profileError, null, 2));
+            console.trace("Stack trace for profile fetch error on auth change"); // Add this line
+          } else if (profileData && profileData.length > 0) {
+            setUserRole(profileData[0].role);
+          } else {
+            console.log("No profile found for user on auth change (fetchRole):", session.user.id);
           }
         };
         fetchRole();

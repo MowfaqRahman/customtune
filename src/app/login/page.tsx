@@ -23,19 +23,24 @@ const Login = () => {
       // Fetch user role after successful login
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        const { data: profile, error: profileError } = await supabase
+        const { data: profileData, error: profileError } = await supabase
           .from('profiles')
           .select('role')
-          .eq('id', user.id)
-          .single();
+          .eq('id', user.id);
         
         if (profileError) {
-          console.error("Error fetching profile after login:", profileError);
+          console.error("Error fetching profile after login (handleLogin):", profileError);
+          console.trace("Stack trace for profile fetch error after login");
           router.push('/'); // Default to home page on profile fetch error
-        } else if (profile?.role === 'admin') {
-          router.push('/admin');
+        } else if (profileData && profileData.length > 0) {
+          if (profileData[0]?.role === 'admin') {
+            router.push('/admin');
+          } else {
+            router.push('/');
+          }
         } else {
-          router.push('/');
+          console.log("No profile found for user after login (handleLogin):", user.id);
+          router.push('/'); // Default to home page if profile not found
         }
       } else {
         router.push('/'); // Default to home page if user object is somehow null

@@ -23,6 +23,17 @@ const Signup = () => {
       // Fetch user role after successful signup
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
+        // Create a profile for the new user if it doesn't exist
+        const { error: profileInsertError } = await supabase
+          .from('profiles')
+          .insert([
+            { id: user.id, username: user.email, role: 'user' } // Default role to 'user'
+          ]);
+
+        if (profileInsertError) {
+          console.error("Error creating profile for new user:", profileInsertError);
+        }
+
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
           .select('role')

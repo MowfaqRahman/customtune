@@ -1,4 +1,5 @@
 import { ChevronDown } from "lucide-react";
+import AllOrders from "@/components/admin/AllOrders";
 
 export default function AdminPage() {
   // Dummy data for the dashboard
@@ -84,6 +85,11 @@ export default function AdminPage() {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* All Orders Section */}
+      <div className="bg-white shadow-md rounded-lg p-6 mt-6">
+        <AllOrders />
       </div>
     </div>
   );

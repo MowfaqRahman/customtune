@@ -1,12 +1,27 @@
 import { NextResponse } from "next/server";
+import { supabase } from "@/lib/supabaseClient";
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: { id: string } }) {
   const { id } = params;
-  const { status } = await request.json();
+  const { status } = await req.json();
 
-  // In a real application, you would update the order status in your database here.
-  // For now, we'll just log the update.
-  console.log(`Updating order ${id} status to: ${status}`);
+  try {
+    const { data, error } = await supabase
+      .from("orders")
+      .update({ status: status })
+      .eq("id", id);
 
-  return NextResponse.json({ message: `Order ${id} status updated to ${status}` });
+    if (error) {
+      console.error("Error updating order status:", error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ message: "Order status updated successfully", data });
+  } catch (error) {
+    console.error("An unexpected error occurred:", error);
+    return NextResponse.json(
+      { error: "An unexpected error occurred" },
+      { status: 500 }
+    );
+  }
 }
