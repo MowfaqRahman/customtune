@@ -13,7 +13,6 @@ const nextConfig: NextConfig = {
     styledComponents: true,
   },
   transpilePackages: ["lucide-react"],
-  serverComponentsExternalPackages: ["@supabase/supabase-js"],
 };
 
 export default nextConfig;
