@@ -1,7 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabaseClient";
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+interface Context {
+  params: { id: string };
+}
+
+export async function PUT(req: NextRequest, { params }: Context) {
   const { id } = params;
   const { status } = await req.json();
 
