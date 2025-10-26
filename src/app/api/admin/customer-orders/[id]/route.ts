@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabaseClient";
 
-interface Context {
-  params: { id: string };
-}
-
-export async function PUT(req: NextRequest, { params }: Context) {
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const { id } = params;
   const { status } = await req.json();
 
@@ -21,10 +17,10 @@ export async function PUT(req: NextRequest, { params }: Context) {
     }
 
     return NextResponse.json({ message: "Order status updated successfully", data });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("An unexpected error occurred:", error);
     return NextResponse.json(
-      { error: "An unexpected error occurred" },
+      { error: (error instanceof Error) ? error.message : String(error) },
       { status: 500 }
     );
   }
