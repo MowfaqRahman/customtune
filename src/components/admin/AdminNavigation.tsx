@@ -64,7 +64,7 @@ export default function AdminNavigation() {
 
 interface NavLinkProps {
   href: string;
-  icon?: any;
+  icon?: React.ElementType; // Changed from any to React.ElementType
   children: React.ReactNode;
   nested?: boolean;
 }
@@ -79,7 +79,7 @@ function NavLink({ href, icon: Icon, children, nested }: NavLinkProps) {
 }
 
 interface DropdownNavLinkProps {
-  icon: any;
+  icon: React.ElementType; // Changed from any to React.ElementType
   title: string;
   children: React.ReactNode;
 }
