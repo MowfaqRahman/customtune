@@ -25,6 +25,8 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
   const isAdminPage = pathname.startsWith("/admin");
+  const isLoginPage = pathname.startsWith("/login");
+  const isSignupPage = pathname.startsWith("/signup");
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -33,9 +35,9 @@ export default function RootLayout({
       >
         <CartProvider>
           <div className="bg-white w-full min-h-screen">
-            {!isAdminPage && <NavigationBar />}
+            {!isAdminPage && !isLoginPage && !isSignupPage && <NavigationBar />}
             <main>{children}</main>
-            {!isAdminPage && <Footer />}
+            {!isAdminPage && !isLoginPage && !isSignupPage && <Footer />}
           </div>
         </CartProvider>
       </body>

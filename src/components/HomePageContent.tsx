@@ -431,30 +431,6 @@ export const HomePageContent = () => {
         </div>
       </section>
 
-      {/* Yellow apparel style grid - just above footer */}
-      <section className="px-[100px] mb-24">
-        <div className="grid grid-cols-3 gap-6">
-          <div className="col-span-2 bg-[#ffe77a] rounded-[16px] h-[300px] flex items-center justify-center">
-            <img src="/rectangle-1459.png" alt="Jackets" className="h-[220px] object-contain" />
-          </div>
-          <div className="space-y-6">
-            <div className="bg-[#ffe77a] rounded-[16px] h-[140px] flex items-center justify-center">
-              <img src="/rectangle-1450.png" alt="Gloves" className="h-[90px] object-contain" />
-            </div>
-            <div className="bg-[#ffe77a] rounded-[16px] h-[140px] flex items-center justify-center">
-              <img src="/rectangle-1450-1.png" alt="Pants" className="h-[90px] object-contain" />
-            </div>
-          </div>
-          <div className="bg-[#ffe77a] rounded-[16px] h-[140px] flex items-center justify-center">
-            <img src="/group-3742.png" alt="Boots" className="h-[90px] object-contain" />
-          </div>
-          <div className="bg-[#ffe77a] rounded-[16px] h-[140px] flex items-center justify-center">
-            <img src="/group-3742-1.png" alt="Knee Guard" className="h-[90px] object-contain" />
-          </div>
-          <div />
-    </div>
-      </section>
-
       {/* Simple footer */}
       {/* The Footer component was removed, so this section is now empty */}
     </>

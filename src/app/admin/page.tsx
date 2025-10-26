@@ -1,53 +1,93 @@
+"use client";
+
 import { ChevronDown } from "lucide-react";
 import AllOrders from "@/components/admin/AllOrders";
+import { useState, useEffect } from "react";
 
 export default function AdminPage() {
-  // Dummy data for the dashboard
-  const customers = 10243;
-  const income = 39403450;
-  const incomeGrowth = 8;
+  const [customers, setCustomers] = useState(0);
+  const [income, setIncome] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [totalIncomeData, setTotalIncomeData] = useState<
+    { month: string; value: number }[]
+  >([]);
 
-  const totalIncomeData = [
-    { month: "Jan", value: 320000 },
-    { month: "Feb", value: 140000 },
-    { month: "Mar", value: 330000 },
-    { month: "Apr", value: 250000 },
-    { month: "May", value: 60000 },
-    { month: "Jun", value: 180000 },
-    { month: "Jul", value: 90000 },
-    { month: "Aug", value: 210000 },
-    { month: "Sep", value: 30000 },
-    { month: "Oct", value: 290000 },
-    { month: "Nov", value: 295000 },
-    { month: "Dec", value: 20000 }
-  ];
+  const incomeGrowth = 8; // This remains dummy data for now
+
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      try {
+        // Fetch overview data (customers and total income)
+        const overviewResponse = await fetch("/api/admin/overview");
+        if (!overviewResponse.ok) {
+          throw new Error(`Error fetching overview: ${overviewResponse.statusText}`);
+        }
+        const overviewData = await overviewResponse.json();
+        setCustomers(overviewData.customers);
+        setIncome(overviewData.income);
+
+        // Fetch all orders for monthly income calculation
+        const ordersResponse = await fetch("/api/admin/orders");
+        if (!ordersResponse.ok) {
+          throw new Error(`Error fetching orders: ${ordersResponse.statusText}`);
+        }
+        const ordersData = await ordersResponse.json();
+
+        const monthlyIncome: { [key: string]: number } = {};
+        ordersData.forEach((order: any) => {
+          const date = new Date(order.created_at);
+          const month = date.toLocaleString("default", { month: "short" });
+          monthlyIncome[month] = (monthlyIncome[month] || 0) + order.total_amount;
+        });
+
+        const months = [
+          "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];
+
+        const dynamicTotalIncomeData = months.map(month => ({
+          month,
+          value: monthlyIncome[month] || 0,
+        }));
+
+        setTotalIncomeData(dynamicTotalIncomeData);
+
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
 
   const maxIncome = Math.max(...totalIncomeData.map(d => d.value));
-  const scaleFactor = 250 / maxIncome; // To scale bars to a max height of 250px
+  const scaleFactor = maxIncome > 0 ? 250 / maxIncome : 0; // To scale bars to a max height of 250px
 
   return (
     <div className="p-4">
       {/* Overview Section */}
       <div className="bg-white shadow-md rounded-lg p-6 mb-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Overview</h2>
+          <h2 className="text-xl font-semibold text-gray-800">Overview</h2>
           <div className="flex items-center space-x-2 border rounded-md px-3 py-1 text-gray-700">
-            <span>All Time</span>
+            <span className="text-gray-700">All Time</span>
             <ChevronDown className="h-4 w-4" />
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-gray-50 rounded-lg p-4 flex items-center justify-between">
             <div>
-              <p className="text-gray-600">Customers</p>
-              <p className="text-2xl font-bold">{customers.toLocaleString()}</p>
+              <p className="text-gray-700">Customers</p>
+              <p className="text-2xl font-bold">{loading ? "Loading..." : customers.toLocaleString()}</p>
             </div>
             <span className="text-green-500 font-semibold">{incomeGrowth}%</span>
           </div>
           <div className="bg-gray-50 rounded-lg p-4 flex items-center justify-between">
             <div>
-              <p className="text-gray-600">Income</p>
-              <p className="text-2xl font-bold">₹{income.toLocaleString()}</p>
+              <p className="text-gray-700">Income</p>
+              <p className="text-2xl font-bold">{loading ? "Loading..." : `₹${income.toLocaleString()}`}</p>
             </div>
             <span className="text-green-500 font-semibold">{incomeGrowth}%</span>
           </div>
@@ -57,9 +97,9 @@ export default function AdminPage() {
       {/* Total Income Section */}
       <div className="bg-white shadow-md rounded-lg p-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Total Income</h2>
+          <h2 className="text-xl font-semibold text-gray-800">Total Income</h2>
           <div className="flex items-center space-x-2 border rounded-md px-3 py-1 text-gray-700">
-            <span>All Time</span>
+            <span className="text-gray-700">All Time</span>
             <ChevronDown className="h-4 w-4" />
           </div>
         </div>

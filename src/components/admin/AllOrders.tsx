@@ -78,30 +78,27 @@ export default function AllOrders() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">All Orders</h1>
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">All Orders</h1>
       <div className="overflow-x-auto bg-white shadow-md rounded-lg">
         <table className="min-w-full leading-normal">
           <thead>
             <tr>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                 Order ID
               </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                 Customer Name
               </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Email
-              </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                 Total Amount
               </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                 Status
               </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                 Order Date
               </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
@@ -109,23 +106,20 @@ export default function AllOrders() {
           <tbody>
             {orders.length === 0 ? (
               <tr>
-                <td colSpan={7} className="text-center py-5 text-gray-500">
+                <td colSpan={6} className="text-center py-5 text-gray-500">
                   No orders found.
                 </td>
               </tr>
             ) : (
               orders.map((order) => (
                 <tr key={order.id}>
-                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-gray-700">
                     {order.id.substring(0, 8)}...
                   </td>
-                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-gray-700">
                     {order.profiles ? (order.profiles.username || "N/A") : "N/A"}
                   </td>
-                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    {order.profiles ? (order.profiles.email || "N/A") : "N/A"}
-                  </td>
-                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-gray-700">
                     ₹{order.total_amount.toFixed(2)}
                   </td>
                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -139,7 +133,7 @@ export default function AllOrders() {
                       <span className="relative">{order.status}</span>
                     </span>
                   </td>
-                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-gray-700">
                     {new Date(order.created_at).toLocaleDateString()}
                   </td>
                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm flex items-center space-x-2">
