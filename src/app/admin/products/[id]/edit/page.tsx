@@ -177,10 +177,10 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
   if (error) return <p className="text-red-500">Error: {error}</p>;
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Edit Product {id}</h1>
-      {error && <p className="text-red-500 mb-4">Error: {error}</p>}
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
+    <div className="p-4 sm:p-6">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4">Edit Product {id}</h1>
+      {error && <p className="text-red-500 mb-4 text-sm">Error: {error}</p>}
+      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-4 sm:p-6">
         <div className="mb-4">
           <label htmlFor="productName" className="block text-gray-700 text-sm font-bold mb-2">
             Product Name:
@@ -188,7 +188,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
           <input
             type="text"
             id="productName"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
             value={productName}
             onChange={(e) => setProductName(e.target.value)}
             required
@@ -200,7 +200,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
           </label>
           <textarea
             id="productDescription"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
             value={productDescription}
             onChange={(e) => setProductDescription(e.target.value)}
             rows={4}
@@ -213,7 +213,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
           <input
             type="number"
             id="productPrice"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
             value={productPrice}
             onChange={(e) => setProductPrice(e.target.value)}
             required
@@ -227,15 +227,15 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
           <label className="block text-gray-700 text-sm font-bold mb-2">
             Existing Product Images:
           </label>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-2 sm:gap-4">
             {existingImages.length > 0 ? (
               existingImages.map((image) => (
-                <div key={image.id} className="relative w-24 h-24 group">
+                <div key={image.id} className="relative w-20 h-20 sm:w-24 sm:h-24 group">
                   <Image src={image.image_url} alt="Product Image" layout="fill" objectFit="cover" className="rounded" />
                   <button
                     type="button"
                     onClick={() => handleImageDelete(image.id)}
-                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-0.5 sm:p-1 text-xs sm:text-sm opacity-0 group-hover:opacity-100 transition-opacity"
                     aria-label="Delete image"
                   >
                     &times;
@@ -243,7 +243,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                 </div>
               ))
             ) : (
-              <p className="text-gray-500">No images for this product.</p>
+              <p className="text-gray-500 text-sm">No images for this product.</p>
             )}
           </div>
         </div>
@@ -258,20 +258,20 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             id="newProductImage"
             accept="image/*"
             multiple // Enable multiple file selection
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
             onChange={handleNewImageChange}
           />
           {newImageUrlPreviews.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-4">
+            <div className="mt-4 flex flex-wrap gap-2 sm:gap-4">
               {newImageUrlPreviews.map((url, index) => (
-                <Image key={index} src={url} alt={`New Image Preview ${index + 1}`} width={100} height={100} className="object-cover rounded" />
+                <Image key={index} src={url} alt={`New Image Preview ${index + 1}`} width={80} height={80} className="object-cover rounded w-20 h-20" />
               ))}
             </div>
           )}
         </div>
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-sm"
           disabled={loading}
         >
           {loading ? "Updating..." : "Update Product"}

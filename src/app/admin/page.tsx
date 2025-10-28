@@ -80,46 +80,46 @@ export default function AdminPage() {
   const scaleFactor = maxIncome > 0 ? 250 / maxIncome : 0; // To scale bars to a max height of 250px
 
   return (
-    <div className="p-4">
+    <div className="p-4 sm:p-6">
       {/* Overview Section */}
-      <div className="bg-white shadow-md rounded-lg p-6 mb-6">
+      <div className="bg-white shadow-md rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">Overview</h2>
-          <div className="flex items-center space-x-2 border rounded-md px-3 py-1 text-gray-700">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800">Overview</h2>
+          <div className="flex items-center space-x-2 border rounded-md px-2 py-1 text-sm text-gray-700">
             <span className="text-gray-700">All Time</span>
-            <ChevronDown className="h-4 w-4" />
+            <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4" />
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-gray-50 rounded-lg p-4 flex items-center justify-between">
             <div>
-              <p className="text-gray-700">Customers</p>
-              <p className="text-2xl font-bold">{loading ? "Loading..." : customers.toLocaleString()}</p>
+              <p className="text-sm sm:text-base text-gray-700">Customers</p>
+              <p className="text-xl sm:text-2xl font-bold">{loading ? "Loading..." : customers.toLocaleString()}</p>
             </div>
-            <span className="text-green-500 font-semibold">{incomeGrowth}%</span>
+            <span className="text-green-500 font-semibold text-sm sm:text-base">{incomeGrowth}%</span>
           </div>
           <div className="bg-gray-50 rounded-lg p-4 flex items-center justify-between">
             <div>
-              <p className="text-gray-700">Income</p>
-              <p className="text-2xl font-bold">{loading ? "Loading..." : `₹${income.toLocaleString()}`}</p>
+              <p className="text-sm sm:text-base text-gray-700">Income</p>
+              <p className="text-xl sm:text-2xl font-bold">{loading ? "Loading..." : `₹${income.toLocaleString()}`}</p>
             </div>
-            <span className="text-green-500 font-semibold">{incomeGrowth}%</span>
+            <span className="text-green-500 font-semibold text-sm sm:text-base">{incomeGrowth}%</span>
           </div>
         </div>
       </div>
 
       {/* Total Income Section */}
-      <div className="bg-white shadow-md rounded-lg p-6">
+      <div className="bg-white shadow-md rounded-lg p-4 sm:p-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">Total Income</h2>
-          <div className="flex items-center space-x-2 border rounded-md px-3 py-1 text-gray-700">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800">Total Income</h2>
+          <div className="flex items-center space-x-2 border rounded-md px-2 py-1 text-sm text-gray-700">
             <span className="text-gray-700">All Time</span>
-            <ChevronDown className="h-4 w-4" />
+            <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4" />
           </div>
         </div>
-        <div className="flex items-end h-72 space-x-2 mt-8">
+        <div className="flex flex-col items-stretch h-72 mt-8 overflow-x-auto">
           {/* Y-axis labels */}
-          <div className="flex flex-col justify-between h-full pr-2 text-sm text-gray-500">
+          <div className="flex flex-row md:flex-col justify-between h-full pr-2 text-xs sm:text-sm text-gray-500 min-w-[30px] md:min-w-0">
             <span>400K</span>
             <span>300K</span>
             <span>200K</span>
@@ -127,11 +127,11 @@ export default function AdminPage() {
             <span>0K</span>
           </div>
           {/* Bars */}
-          <div className="flex flex-1 h-full items-end justify-around border-l border-gray-200">
+          <div className="flex flex-1 h-full items-end justify-around border-l border-gray-200 pl-2">
             {totalIncomeData.map((data) => (
-              <div key={data.month} className="flex flex-col items-center h-full justify-end">
+              <div key={data.month} className="flex flex-col items-center h-full justify-end flex-grow min-w-[40px]">
                 <div
-                  className="w-8 bg-blue-500 rounded-t-md"
+                  className="w-4 sm:w-6 md:w-8 bg-blue-500 rounded-t-md"
                   style={{ height: `${data.value * scaleFactor}px` }}
                 ></div>
                 <span className="mt-2 text-xs text-gray-600">{data.month}</span>
@@ -142,7 +142,7 @@ export default function AdminPage() {
       </div>
 
       {/* All Orders Section */}
-      <div className="bg-white shadow-md rounded-lg p-6 mt-6">
+      <div className="bg-white shadow-md rounded-lg p-4 sm:p-6 mt-4 sm:mt-6">
         <AllOrders />
       </div>
     </div>

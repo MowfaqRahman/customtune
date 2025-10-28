@@ -67,63 +67,63 @@ export const HomePageContent = () => {
 
   return (
     <>
-      <section className="relative px-[100px] py-12 mb-24">
-        <div className="grid grid-cols-3 gap-6 h-[756px]">
-          <div className="relative rounded-[10px] overflow-hidden bg-[#e0e0e0]">
+      <section className="relative px-4 py-8 md:px-[100px] md:py-12 mb-12 md:mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 h-auto md:h-[756px]">
+          <div className="relative rounded-[10px] overflow-hidden bg-[#e0e0e0] h-[300px] md:h-auto">
             <Image
               className="absolute inset-0 w-full h-full object-cover"
               alt="Header left"
               src="/assets/header1.jpg"
-              width={756} // Approximate width of the container
-              height={756} // Approximate height of the container
+              width={756} 
+              height={756} 
             />
           </div>
-          <div className="relative flex flex-col items-center justify-center bg-[url(/bg.svg)] bg-cover bg-center rounded-[10px]">
+          <div className="relative flex flex-col items-center justify-center bg-[url(/bg.svg)] bg-cover bg-center rounded-[10px] h-[300px] md:h-auto p-4">
             <div className="text-center">
-              <div className="[font-family:'Poppins',Helvetica] font-medium text-[#484848] text-[91px] tracking-[-3.64px] leading-[91px] whitespace-nowrap">
+              <div className="[font-family:'Poppins',Helvetica] font-medium text-[#484848] text-[40px] md:text-[91px] tracking-[-1.6px] md:tracking-[-3.64px] leading-[40px] md:leading-[91px] whitespace-nowrap">
                 ULTIMATE
               </div>
-              <div className="[-webkit-text-stroke:1px_#484848] [font-family:'Poppins',Helvetica] font-medium text-transparent text-[187px] tracking-[-10.29px] leading-[187px] whitespace-nowrap">
+              <div className="[-webkit-text-stroke:1px_#484848] [font-family:'Poppins',Helvetica] font-medium text-transparent text-[80px] md:text-[187px] tracking-[-4.1px] md:tracking-[-10.29px] leading-[80px] md:leading-[187px] whitespace-nowrap">
                 SALE
               </div>
-              <Button className="mt-12 bg-black text-white rounded-[10px] shadow-[0px_20px_35px_#00000026] px-[59px] py-5 h-14 [font-family:'Poppins',Helvetica] font-medium text-base tracking-[0] leading-4">
+              <Button className="mt-6 md:mt-12 bg-black text-white rounded-[10px] shadow-[0px_20px_35px_#00000026] px-8 py-3 h-10 md:px-[59px] md:py-5 md:h-14 [font-family:'Poppins',Helvetica] font-medium text-sm md:text-base tracking-[0] leading-4">
                 SHOP NOW
               </Button>
             </div>
           </div>
 
-          <div className="relative rounded-[10px] overflow-hidden">
+          <div className="relative rounded-[10px] overflow-hidden bg-[#e0e0e0] h-[300px] md:h-auto">
             <Image
               className="absolute inset-0 w-full h-full object-cover"
               alt="Header right"
               src="/assets/header2.jpg"
-              width={756} // Approximate width of the container
-              height={756} // Approximate height of the container
+              width={756} 
+              height={756} 
             />
           </div>
         </div>
       </section>
 
       {/* removed small double-image feature to match new order */}
-      <section className="px-[100px] mb-24">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="[font-family:'Gilroy-Bold-Bold',Helvetica] font-bold text-[#1e1e1e] text-[50.9px] tracking-[0] leading-[normal]">
+      <section className="px-4 md:px-[100px] mb-12 md:mb-24">
+        <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-4">
+          <h2 className="[font-family:'Gilroy-Bold-Bold',Helvetica] font-bold text-[#1e1e1e] text-[30px] md:text-[50.9px] tracking-[0] leading-[normal] text-center md:text-left">
             Best Selling Product
           </h2>
           <button className="text-[#e58311] text-sm" onClick={() => router.push("/search")}>View All →</button>
         </div>
 
-        <div className="flex justify-center mb-12">
+        <div className="flex justify-center mb-12 overflow-x-auto">
           <ToggleGroup
             type="single"
             defaultValue="wheels"
-            className="bg-[#eeeeee] rounded-[53.33px] p-[7.27px]"
+            className="bg-[#eeeeee] rounded-[53.33px] p-[7.27px] flex-nowrap"
           >
             {categoryTabs.map((tab) => (
               <ToggleGroupItem
                 key={tab.id}
                 value={tab.id}
-                className="rounded-[38.79px] px-[12.12px] py-[4.85px] data-[state=on]:bg-white [font-family:'Gilroy-Medium-Medium',Helvetica] font-medium text-[#1e1e1e] text-[21.8px] leading-[40.4px] tracking-[0] opacity-80 h-auto"
+                className="rounded-[38.79px] px-[12.12px] py-[4.85px] data-[state=on]:bg-white [font-family:'Gilroy-Medium-Medium',Helvetica] font-medium text-[#1e1e1e] text-[16px] md:text-[21.8px] leading-[40.4px] tracking-[0] opacity-80 h-auto whitespace-nowrap"
               >
                 {tab.label}
               </ToggleGroupItem>
@@ -132,15 +132,9 @@ export const HomePageContent = () => {
         </div>
 
           <div className="relative">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-[108px] h-[108px] rounded-full"
-          >
-            <ChevronLeftIcon className="w-12 h-12" />
-          </Button>
+          {/* Removed desktop-only chevron buttons for simplicity; can re-add with responsive hiding */}
 
-          <div className="grid grid-cols-4 gap-[50.9px] px-[150px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-[50.9px] px-0 md:px-[150px]">
             {loading ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />) : products.slice(0, 4).map((product) => (
               <Card key={product.id} className="bg-white rounded-[24.24px] border-0 shadow-sm">
                 <CardContent className="p-0 flex flex-col h-full">
@@ -192,42 +186,50 @@ export const HomePageContent = () => {
             ))}
           </div>
 
+          {/* Re-adding chevron buttons with responsive classes */}
           <Button
             variant="ghost"
             size="icon"
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-[108px] h-[108px] rounded-full"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-[108px] md:h-[108px] rounded-full hidden lg:flex"
           >
-            <ChevronRightIcon className="w-12 h-12" />
+            <ChevronLeftIcon className="w-6 h-6 md:w-12 md:h-12" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-[108px] md:h-[108px] rounded-full hidden lg:flex"
+          >
+            <ChevronRightIcon className="w-6 h-6 md:w-12 md:h-12" />
           </Button>
         </div>
       </section>
 
       {/* Experiences */}
-      <section className="px:[100px] px-[100px] mb-40">
-        <div className="grid grid-cols-2 gap-16 items-center">
+      <section className="px-4 md:px-[100px] mb-12 md:mb-40">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
           <div className="relative">
-            <div className="absolute -top-8 -left-8 w-[260px] h-[200px] bg-black/5 rounded-[24px]" />
+            <div className="absolute -top-4 -left-4 md:-top-8 md:-left-8 w-[180px] h-[140px] md:w-[260px] md:h-[200px] bg-black/5 rounded-[12px] md:rounded-[24px]" />
             <Image
               src="/assets/f1.jpg"
               alt="Experience car"
-              className="relative z-10 w-full max-w-[620px] h-[360px] object-cover rounded-[16px] shadow-[0_20px_40px_rgba(0,0,0,0.15)]"
+              className="relative z-10 w-full max-w-full md:max-w-[620px] h-[240px] md:h-[360px] object-cover rounded-[12px] md:rounded-[16px] shadow-[0_10px_20px_rgba(0,0,0,0.1)] md:shadow-[0_20px_40px_rgba(0,0,0,0.15)]"
               width={620}
               height={360}
             />
           </div>
-          <div>
-            <div className="text-[#e58311] text-sm tracking-[2px] uppercase mb-2">Experiences</div>
-            <h2 className="[font-family:'Gilroy-Bold-Bold',Helvetica] font-bold text-[#1e1e1e] text-[42px] leading-[1.1] mb-4">
+          <div className="text-center md:text-left">
+            <div className="text-[#e58311] text-xs md:text-sm tracking-[1px] md:tracking-[2px] uppercase mb-2">Experiences</div>
+            <h2 className="[font-family:'Gilroy-Bold-Bold',Helvetica] font-bold text-[#1e1e1e] text-[30px] md:text-[42px] leading-[1.2] md:leading-[1.1] mb-4">
               We Provide You The
               <br />
               Best Experience
             </h2>
-            <p className="opacity-80 [font-family:'Gilroy-Regular-Regular',Helvetica] font-normal text-[#1e1e1e] text-lg leading-[33.3px] mb-6">
+            <p className="opacity-80 [font-family:'Gilroy-Regular-Regular',Helvetica] font-normal text-[#1e1e1e] text-sm md:text-lg leading-[24px] md:leading-[33.3px] mb-6">
               You don&apos;t have to worry about the result because all of our
               interiors are made by professionals with elegant and luxurious
               design and premium quality materials.
             </p>
-            <button className="inline-flex items-center gap-3 text-[#e58311] text-sm">
+            <button className="inline-flex items-center gap-2 md:gap-3 text-[#e58311] text-sm">
               <span>More info</span>
               <span>→</span>
             </button>
@@ -236,35 +238,35 @@ export const HomePageContent = () => {
       </section>
 
       {/* Materials + gallery (f2 as the large image) */}
-      <section className="px-[100px] mb-24">
-        <div className="grid grid-cols-2 gap-16 items-center">
-          <div>
-            <div className="text-[#e58311] text-sm tracking-[2px] uppercase mb-2">Performance</div>
-            <h2 className="[font-family:'Gilroy-Bold-Bold',Helvetica] font-bold text-[#1e1e1e] text-[42px] leading-[1.1] mb-4">
+      <section className="px-4 md:px-[100px] mb-12 md:mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
+          <div className="text-center md:text-left order-2 md:order-1">
+            <div className="text-[#e58311] text-xs md:text-sm tracking-[1px] md:tracking-[2px] uppercase mb-2">Performance</div>
+            <h2 className="[font-family:'Gilroy-Bold-Bold',Helvetica] font-bold text-[#1e1e1e] text-[30px] md:text-[42px] leading-[1.2] md:leading-[1.1] mb-4">
               Premium Aftermarket Parts For
               <br />
               Car Enthusiasts
             </h2>
-            <p className="opacity-80 [font-family:'Gilroy-Regular-Regular',Helvetica] font-normal text-[#1e1e1e] text-lg leading-[33.3px]">
+            <p className="opacity-80 [font-family:'Gilroy-Regular-Regular',Helvetica] font-normal text-[#1e1e1e] text-sm md:text-lg leading-[24px] md:leading-[33.3px]">
               Because we&apos;re serious about automotive performance, using premium
               materials and advanced engineering to enhance your ride at competitive prices.
             </p>
           </div>
-          <div className="relative">
-            <div className="absolute -top-8 -right-10 w-[300px] h-[220px] bg-black/5 rounded-[24px]" />
+          <div className="relative order-1 md:order-2">
+            <div className="absolute -top-4 -right-4 md:-top-8 md:-right-10 w-[220px] h-[160px] md:w-[300px] md:h-[220px] bg-black/5 rounded-[12px] md:rounded-[24px]" />
             <div className="grid grid-cols-2 gap-4 items-center">
               <div className="space-y-4">
                 <Image
                   src="/assets/header2.jpg"
                   alt="thumb 1"
-                  className="w-[180px] h-[140px] object-cover rounded-[14px]"
+                  className="w-full h-[100px] md:w-[180px] md:h-[140px] object-cover rounded-[14px]"
                   width={180}
                   height={140}
                 />
                 <Image
                   src="/assets/header1.jpg"
                   alt="thumb 2"
-                  className="w-[180px] h-[180px] object-cover rounded-[14px]"
+                  className="w-full h-[100px] md:w-[180px] md:h-[180px] object-cover rounded-[14px]"
                   width={180}
                   height={180}
                 />
@@ -272,7 +274,7 @@ export const HomePageContent = () => {
               <Image
                 src="/assets/f2.jpg"
                 alt="materials feature"
-                className="w-[520px] h-[320px] object-cover rounded-[18px] shadow-[0_20px_40px_rgba(0,0,0,0.15)]"
+                className="w-full h-[200px] md:w-[520px] md:h-[320px] object-cover rounded-[18px] shadow-[0_10px_20px_rgba(0,0,0,0.1)] md:shadow-[0_20px_40px_rgba(0,0,0,0.15)]"
                 width={520}
                 height={320}
               />
@@ -282,14 +284,14 @@ export const HomePageContent = () => {
       </section>
 
       {/* New Arrivals */}
-      <section className="px-[100px] mb-24">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-center [font-family:'Gilroy-Bold-Bold',Helvetica] font-bold text-[#1e1e1e] text-[36px] tracking-[0] leading-[normal]">
+      <section className="px-4 md:px-[100px] mb-12 md:mb-24">
+        <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-4">
+          <h2 className="text-center [font-family:'Gilroy-Bold-Bold',Helvetica] font-bold text-[#1e1e1e] text-[30px] md:text-[36px] tracking-[0] leading-[normal]">
             <span className="text-black/70">New</span> Arrivals <span className="text-black">Product</span>
           </h2>
           <button className="text-[#e58311] text-sm" onClick={() => router.push("/search?query=new-arrivals")}>View All →</button>
         </div>
-        <div className="grid grid-cols-4 gap-[50.9px] px-[150px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-[50.9px] px-0 md:px-[150px]">
           {loading ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />) : products.slice(0, 4).map((product) => (
             <Card key={`new-${product.id}`} className="bg-white rounded-[24.24px] border-0 shadow-sm">
               <CardContent className="p-0 flex flex-col h-full">
@@ -324,7 +326,7 @@ export const HomePageContent = () => {
       </section>
 
       {/* Full width hero between sections */}
-      <section className="mb-24">
+      <section className="mb-12 md:mb-24">
         <div className="relative w-full" style={{ paddingTop: "42.86%" }}>
           <video
             src="/assets/video.mp4"
@@ -338,12 +340,12 @@ export const HomePageContent = () => {
       </section>
 
       {/* Performance Product */}
-      <section className="px-[100px] mb-24">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="[font-family:'Gilroy-Bold-Bold',Helvetica] font-bold text-[#1e1e1e] text-[36px]">Performance Product</h2>
+      <section className="px-4 md:px-[100px] mb-12 md:mb-24">
+        <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-4">
+          <h2 className="[font-family:'Gilroy-Bold-Bold',Helvetica] font-bold text-[#1e1e1e] text-[30px] md:text-[36px]">Performance Product</h2>
           <button className="text-[#e58311] text-sm" onClick={() => router.push("/search")}>View All →</button>
         </div>
-        <div className="grid grid-cols-4 gap-[50.9px] px-[150px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-[50.9px] px-0 md:px-[150px]">
           {loading ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />) : products.slice(0, 4).map((product) => (
             <Card key={`perf-${product.id}`} className="bg-white rounded-[24.24px] border-0 shadow-sm">
               <CardContent className="p-0 flex flex-col h-full">
@@ -378,12 +380,12 @@ export const HomePageContent = () => {
       </section>
 
       {/* Fog Lights */}
-      <section className="px-[100px] mb-24">
-        <div className="flex items-center justify-between mb-6">
+      <section className="px-4 md:px-[100px] mb-12 md:mb-24">
+        <div className="flex flex-col md:flex-row items-center justify-between mb-6 gap-4">
           <h2 className="[font-family:'Gilroy-Bold-Bold',Helvetica] font-bold text-[#1e1e1e] text-[24px]">Fog Lights</h2>
           <button className="text-[#e58311] text-sm" onClick={() => router.push("/search")}>View All →</button>
         </div>
-        <div className="grid grid-cols-4 gap-[50.9px] px-[150px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-[50.9px] px-0 md:px-[150px]">
           {loading ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />) : products.slice(0, 4).map((product) => (
             <Card key={`fog-${product.id}`} className="bg-white rounded-[24.24px] border-0 shadow-sm">
               <CardContent className="p-0 flex flex-col h-full">
@@ -418,31 +420,31 @@ export const HomePageContent = () => {
       </section>
 
       {/* Promo duo section - moved near bottom */}
-      <section className="px-[100px] mb-24">
-        <div className="grid grid-cols-2 gap-8">
-          <div className="relative rounded-[16px] overflow-hidden bg-black/5">
+      <section className="px-4 md:px-[100px] mb-12 md:mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+          <div className="relative rounded-[16px] overflow-hidden bg-black/5 h-[200px] md:h-[260px]">
             <Image
               src="/rectangle-1456.png"
               alt="Free shipping"
-              className="w-full h-[260px] object-cover opacity-80"
-              width={600} // Approximate width
+              className="w-full h-full object-cover opacity-80"
+              width={600}
               height={260}
             />
             <div className="absolute top-4 left-4">
-              <span className="inline-block bg-[#ffeb3b] text-[12px] px-3 py-1 rounded-full uppercase tracking-wide">
+              <span className="inline-block bg-[#ffeb3b] text-[10px] md:text-[12px] px-2 py-1 rounded-full uppercase tracking-wide">
                 Free shipping for amount above ₹ 800
               </span>
             </div>
-            <div className="absolute bottom-6 left-6">
-              <span className="bg-red-600 text-white px-4 py-2 rounded-md shadow">FREE SHIPPING</span>
+            <div className="absolute bottom-4 left-4">
+              <span className="bg-red-600 text-white px-3 py-1 rounded-md shadow text-sm">FREE SHIPPING</span>
             </div>
           </div>
-          <div className="relative rounded-[16px] overflow-hidden bg-[#0a0a0a] h-[260px] flex items-start">
-            <div className="m-6">
-              <div className="inline-flex bg-[#ffe000] px-3 py-2 rounded-md">
-                <div className="text-black font-semibold text-[22px] leading-none">36% OFF</div>
+          <div className="relative rounded-[16px] overflow-hidden bg-[#0a0a0a] h-[200px] md:h-[260px] flex items-start">
+            <div className="m-4 md:m-6">
+              <div className="inline-flex bg-[#ffe000] px-2 py-1 rounded-md">
+                <div className="text-black font-semibold text-[18px] md:text-[22px] leading-none">36% OFF</div>
               </div>
-              <div className="mt-3 text-white/60 text-sm">Flash Sale • Limited Time</div>
+              <div className="mt-2 text-white/60 text-xs md:text-sm">Flash Sale • Limited Time</div>
             </div>
           </div>
         </div>

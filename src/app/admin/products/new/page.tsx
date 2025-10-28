@@ -109,10 +109,10 @@ export default function NewProductPage() {
   };
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Add New Product</h1>
-      {error && <p className="text-red-500 mb-4">Error: {error}</p>}
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
+    <div className="p-4 sm:p-6">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4">Add New Product</h1>
+      {error && <p className="text-red-500 mb-4 text-sm">Error: {error}</p>}
+      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-4 sm:p-6">
         <div className="mb-4">
           <label htmlFor="productName" className="block text-gray-700 text-sm font-bold mb-2">
             Product Name:
@@ -120,7 +120,7 @@ export default function NewProductPage() {
           <input
             type="text"
             id="productName"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
             value={productName}
             onChange={(e) => setProductName(e.target.value)}
             required
@@ -132,7 +132,7 @@ export default function NewProductPage() {
           </label>
           <textarea
             id="productDescription"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
             value={productDescription}
             onChange={(e) => setProductDescription(e.target.value)}
             rows={4}
@@ -145,7 +145,7 @@ export default function NewProductPage() {
           <input
             type="number"
             id="productPrice"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
             value={productPrice}
             onChange={(e) => setProductPrice(e.target.value)}
             required
@@ -162,20 +162,20 @@ export default function NewProductPage() {
             id="productImages"
             accept="image/*"
             multiple // Enable multiple file selection
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
             onChange={handleImageChange}
           />
           {imageUrlPreviews.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-4">
+            <div className="mt-4 flex flex-wrap gap-2 sm:gap-4">
               {imageUrlPreviews.map((url, index) => (
-                <Image key={index} src={url} alt={`Product Preview ${index + 1}`} width={100} height={100} className="object-cover rounded" />
+                <Image key={index} src={url} alt={`Product Preview ${index + 1}`} width={80} height={80} className="object-cover rounded w-20 h-20" />
               ))}
             </div>
           )}
         </div>
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-sm"
           disabled={loading}
         >
           {loading ? "Adding..." : "Add Product"}

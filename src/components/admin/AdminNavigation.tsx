@@ -1,23 +1,32 @@
 "use client";
 
 import Link from "next/link";
-import { Home, Package, Users, ShoppingBag, DollarSign, Share2, LogOut, ChevronDown } from "lucide-react";
+import { Home, Package, Users, ShoppingBag, DollarSign, Share2, LogOut, ChevronDown, X } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { supabase } from '../../lib/supabaseClient';
 
-export default function AdminNavigation() {
+interface AdminNavigationProps {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+}
+
+export default function AdminNavigation({ isOpen, setIsOpen }: AdminNavigationProps) {
   const router = useRouter();
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.push('/login');
+    setIsOpen(false); // Close mobile menu on logout
   };
 
   return (
-    <div className="flex h-screen bg-white shadow-lg w-64 flex-col fixed inset-y-0">
-      <div className="flex items-center justify-center h-16 border-b">
+    <div
+      className={`flex h-screen bg-white shadow-lg flex-col fixed inset-y-0 z-50 transform ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 transition-transform duration-200 ease-in-out
+        w-64`}
+    >
+      <div className="flex items-center justify-between h-16 border-b px-4">
         <Image
           src="/assets/hardtunelogo.png"
           alt="Duka Logo"
@@ -25,6 +34,9 @@ export default function AdminNavigation() {
           height={40}
           priority
         />
+        <button onClick={() => setIsOpen(false)} className="md:hidden text-gray-600 hover:text-gray-900 focus:outline-none">
+          <X className="h-6 w-6" />
+        </button>
       </div>
       <div className="flex-1 overflow-y-auto">
         <nav className="flex-1 px-2 py-4 space-y-2">

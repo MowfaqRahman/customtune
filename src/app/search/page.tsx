@@ -69,61 +69,61 @@ export default function SearchResultsPage() {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">
+    <div className="container mx-auto p-4 sm:p-6">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4">
         {searchQuery === 'new-arrivals' ? 'New Arrivals' : `Search Results for "${searchQuery}"`}
       </h1>
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {Array.from({ length: 8 }).map((_, i) => (
             <SkeletonCard key={i} />
           ))}
         </div>
       ) : products.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {products.map((product) => (
             <Card key={product.id} className="bg-white rounded-[24.24px] border-0 shadow-sm">
               <CardContent className="p-0 flex flex-col h-full">
                 <Link href={`/product/${product.id}`} className="block no-underline">
-                  <div className="relative w-full h-[180px] aspect-square bg-gray-100 rounded-t-[24.24px] flex items-center justify-center cursor-pointer">
+                  <div className="relative w-full h-[150px] sm:h-[180px] aspect-square bg-gray-100 rounded-t-[24.24px] flex items-center justify-center cursor-pointer">
                     <Image
-                      className="max-w-[180px] max-h-[110px] object-contain"
+                      className="max-w-[150px] sm:max-w-[180px] max-h-[90px] sm:max-h-[110px] object-contain"
                       alt={product.name}
                       src={product.product_images?.[0]?.image_url || product.image || '/placeholder.png'}
-                      width={180} // Max width of the container
-                      height={110} // Max height of the image
+                      width={180} 
+                      height={110} 
                     />
                   </div>
                 </Link>
 
-                <div className="p-[18px] flex flex-col flex-grow">
-                  <div className="mb-[7.4px]">
-                    <span className="[font-family:'Inter',Helvetica] font-normal text-[#8d8d8d] text-[20.3px] leading-[normal] tracking-[0]">
+                <div className="p-3 sm:p-[18px] flex flex-col flex-grow">
+                  <div className="mb-[4px]">
+                    <span className="[font-family:'Inter',Helvetica] font-normal text-[#8d8d8d] text-xs sm:text-[20.3px] leading-[normal] tracking-[0]">
                       {product.category}
                     </span>
                   </div>
                   <Link href={`/product/${product.id}`} className="block no-underline">
-                    <h3 className="[font-family:'Inter',Helvetica] font-medium text-[#0d1a39] text-[20.3px] tracking-[0] leading-[normal] mb-[4px] cursor-pointer hover:text-[#0d1a39]/80">
+                    <h3 className="[font-family:'Inter',Helvetica] font-medium text-[#0d1a39] text-sm sm:text-[20.3px] tracking-[0] leading-[normal] mb-[4px] cursor-pointer hover:text-[#0d1a39]/80">
                       {product.name}
                     </h3>
                   </Link>
 
                   <div className="flex items-center justify-between mt-auto">
                     <div className="flex items-baseline gap-[3.7px]">
-                      <span className="[font-family:'Inter',Helvetica] font-semibold text-[#0d1a39] text-[18.5px] tracking-[0] leading-[normal]">
+                      <span className="[font-family:'Inter',Helvetica] font-semibold text-[#0d1a39] text-sm sm:text-[18.5px] tracking-[0] leading-[normal]">
                         ₹
                       </span>
-                      <span className="[font-family:'Inter',Helvetica] font-semibold text-[#0d1a39] text-[25.8px] tracking-[0] leading-[normal]">
+                      <span className="[font-family:'Inter',Helvetica] font-semibold text-[#0d1a39] text-base sm:text-[25.8px] tracking-[0] leading-[normal]">
                         {product.price}
                       </span>
                     </div>
                     <Button
                       size="icon"
-                      className="w-9 h-9 rounded-full bg-black hover:bg-black/90"
+                      className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black hover:bg-black/90"
                       aria-label="Add to cart"
                       onClick={() => handleAddToCart(product)}
                     >
-                      <PlusIcon className="w-4 h-4 text-white" />
+                      <PlusIcon className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                     </Button>
                   </div>
                 </div>
@@ -132,7 +132,7 @@ export default function SearchResultsPage() {
           ))}
         </div>
       ) : (
-        <p className="text-gray-600">No products found matching your search.</p>
+        <p className="text-gray-600 text-sm">No products found matching your search.</p>
       )}
     </div>
   );

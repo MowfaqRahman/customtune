@@ -87,10 +87,10 @@ export default function AdminProductsPage() {
   if (error) return <p className="text-red-500">Error: {error}</p>;
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Products</h1>
+    <div className="p-4 sm:p-6">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4">Products</h1>
       <Link href="/admin/products/new">
-        <span className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">
+        <span className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block text-sm">
           Add New Product
         </span>
       </Link>
@@ -98,31 +98,33 @@ export default function AdminProductsPage() {
         <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
           <thead className="bg-gray-200">
             <tr>
-              <th className="py-3 px-4 uppercase font-semibold text-sm text-gray-600">ID</th>
-              <th className="py-3 px-4 uppercase font-semibold text-sm text-gray-600">Image</th>
-              <th className="py-3 px-4 uppercase font-semibold text-sm text-gray-600">Name</th>
-              <th className="py-3 px-4 uppercase font-semibold text-sm text-gray-600">Price</th>
-              <th className="py-3 px-4 uppercase font-semibold text-sm text-gray-600">Actions</th>
+              <th className="py-2 px-2 sm:py-3 sm:px-4 uppercase font-semibold text-xs text-gray-600 whitespace-nowrap">ID</th>
+              <th className="py-2 px-2 sm:py-3 sm:px-4 uppercase font-semibold text-xs text-gray-600 whitespace-nowrap">Image</th>
+              <th className="py-2 px-2 sm:py-3 sm:px-4 uppercase font-semibold text-xs text-gray-600 whitespace-nowrap">Name</th>
+              <th className="py-2 px-2 sm:py-3 sm:px-4 uppercase font-semibold text-xs text-gray-600 whitespace-nowrap">Price</th>
+              <th className="py-2 px-2 sm:py-3 sm:px-4 uppercase font-semibold text-xs text-gray-600 whitespace-nowrap">Actions</th>
             </tr>
           </thead>
           <tbody className="text-gray-700">
             {products.map((product) => (
               <tr key={product.id} className="border-b border-gray-200">
-                <td className="py-3 px-4">{product.id}</td>
-                <td className="py-3 px-4">
+                <td className="py-2 px-2 sm:py-3 sm:px-4 text-xs sm:text-sm whitespace-nowrap max-w-[80px] overflow-hidden text-ellipsis">{product.id.substring(0, 8)}...</td>
+                <td className="py-2 px-2 sm:py-3 sm:px-4">
                   {product.imageUrl ? (
-                    <Image src={product.imageUrl} alt={product.name} width={50} height={50} className="object-cover rounded" />
+                    <Image src={product.imageUrl} alt={product.name} width={40} height={40} className="object-cover rounded w-10 h-10" />
                   ) : (
-                    <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-sm text-gray-500">No Image</div>
+                    <div className="w-10 h-10 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500">No Image</div>
                   )}
                 </td>
-                <td className="py-3 px-4">{product.name}</td>
-                <td className="py-3 px-4">₹{product.price.toFixed(2)}</td>
-                <td className="py-3 px-4">
+                <td className="py-2 px-2 sm:py-3 sm:px-4 text-xs sm:text-sm whitespace-nowrap max-w-[120px] overflow-hidden text-ellipsis">{product.name}</td>
+                <td className="py-2 px-2 sm:py-3 sm:px-4 text-xs sm:text-sm whitespace-nowrap">₹{product.price.toFixed(2)}</td>
+                <td className="py-2 px-2 sm:py-3 sm:px-4 text-xs sm:text-sm flex flex-col sm:flex-row items-start sm:items-center space-y-1 sm:space-y-0 sm:space-x-2">
                   <Link href={`/admin/products/${product.id}/edit`}>
-                    <span className="text-blue-600 hover:text-blue-900 mr-2">Edit</span>
+                    <span className="text-blue-600 hover:text-blue-900">Edit</span>
                   </Link>
-                  <button onClick={() => handleDelete(product.id)} className="text-red-600 hover:text-red-900">Delete</button>
+                  <button onClick={() => handleDelete(product.id)} className="text-red-600 hover:text-red-900">
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}

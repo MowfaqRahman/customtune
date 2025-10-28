@@ -151,16 +151,16 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   }
 
   return (
-    <div className="bg-white w-full min-h-screen">
-      <div className="grid grid-cols-2 gap-10 px-[100px] py-10">
+    <div className="bg-white w-full min-h-screen p-4 sm:p-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 py-6 md:py-10">
         {/* Left: large image with vertical thumbnails */}
-        <div className="grid grid-cols-[120px_1fr] gap-6 items-start">
-          <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-[80px_1fr] sm:grid-cols-[120px_1fr] gap-4 sm:gap-6 items-start">
+          <div className="flex flex-col gap-2 sm:gap-4">
             {gallery.map((image, idx) => (
               <button
                 key={image.image_url}
                 onClick={() => setActiveIndex(idx)}
-                className={`h-[90px] w-[120px] rounded-[12px] overflow-hidden border ${
+                className={`h-[60px] w-[80px] sm:h-[90px] sm:w-[120px] rounded-[8px] sm:rounded-[12px] overflow-hidden border ${
                   activeIndex === idx ? "border-black" : "border-transparent"
                 }`}
               >
@@ -168,47 +168,47 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               </button>
             ))}
           </div>
-          <div className="relative rounded-[16px] overflow-hidden bg-black/5">
-            <Image src={gallery[activeIndex]?.image_url || '/placeholder.png'} alt="product" width={520} height={520} className="w-full h-[520px] object-cover" />
+          <div className="relative rounded-[12px] sm:rounded-[16px] overflow-hidden bg-black/5">
+            <Image src={gallery[activeIndex]?.image_url || '/placeholder.png'} alt="product" width={520} height={520} className="w-full h-[300px] sm:h-[520px] object-cover" />
           </div>
         </div>
 
         {/* Right: details */}
         <div>
-          <h1 className="[font-family:'Gilroy-Bold-Bold',Helvetica] font-bold text-[#1e1e1e] text-[32px] leading-tight mb-2">
+          <h1 className="[font-family:'Gilroy-Bold-Bold',Helvetica] font-bold text-xl sm:text-[32px] leading-tight mb-2">
             {productData.name}
           </h1>
-          <div className="flex items-center gap-3 mb-6">
-            <div className="text-[22px] font-semibold">₹{productData.price}</div>
+          <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+            <div className="text-lg sm:text-[22px] font-semibold">₹{productData.price}</div>
           </div>
 
-          <div className="flex items-center gap-3 mb-6">
+          <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
             <button
               onClick={() => setQty(Math.max(1, qty - 1))}
-              className="w-10 h-10 rounded-full border"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border flex items-center justify-center"
               aria-label="decrease"
             >
-              <MinusIcon className="w-4 h-4" />
+              <MinusIcon className="w-3 h-3 sm:w-4 sm:h-4" />
             </button>
-            <div className="w-12 text-center">{qty}</div>
+            <div className="w-10 text-center text-sm sm:text-base">{qty}</div>
             <button
               onClick={() => setQty(qty + 1)}
-              className="w-10 h-10 rounded-full border"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border flex items-center justify-center"
               aria-label="increase"
             >
-              <PlusIcon className="w-4 h-4" />
+              <PlusIcon className="w-3 h-3 sm:w-4 sm:h-4" />
             </button>
           </div>
 
-          <div className="flex gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-4 sm:mb-6">
             <button
-              className="flex-1 h-12 rounded-md bg-black text-white hover:bg-black/90 transition-colors"
+              className="flex-1 h-10 sm:h-12 rounded-md bg-black text-white hover:bg-black/90 transition-colors text-sm sm:text-base"
               onClick={handleAddToCart}
             >
               ADD TO CART
             </button>
             <button
-              className="flex-1 h-12 rounded-md bg-[#ffe000] hover:bg-[#ffe000]/90 transition-colors"
+              className="flex-1 h-10 sm:h-12 rounded-md bg-[#ffe000] hover:bg-[#ffe000]/90 transition-colors text-sm sm:text-base"
               onClick={handleBuyNow}
             >
               BUY IT NOW
@@ -218,8 +218,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
           {/* Accordion for Description */}
           {productData.description && (
             <details className="border rounded-md mb-4" open>
-              <summary className="cursor-pointer select-none px-4 py-3 font-medium">Description</summary>
-              <div className="px-4 pb-4 text-sm text-black/80 leading-7">
+              <summary className="cursor-pointer select-none px-3 py-2 sm:px-4 sm:py-3 font-medium text-sm sm:text-base">Description</summary>
+              <div className="px-3 pb-3 sm:px-4 sm:pb-4 text-xs sm:text-sm text-black/80 leading-6 sm:leading-7">
                 {productData.description}
               </div>
             </details>
