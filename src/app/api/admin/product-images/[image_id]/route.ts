@@ -1,7 +1,7 @@
+import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabaseClient";
-import { NextResponse } from "next/server";
 
-export async function DELETE(request: Request, { params }: { params: { image_id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: { image_id: string } }) {
   const { image_id } = params;
 
   // First, get the image URL to delete from storage
