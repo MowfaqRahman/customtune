@@ -15,7 +15,7 @@ export function createClient() {
         set(name: string, value: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value, ...options })
-          } catch (error) {
+          } catch {
             // The `cookies().set()` method can only be called in a Server Component or Route Handler
             // This error is typically not a problem if you're still rendering a server component that sets cookies
           }
@@ -23,7 +23,7 @@ export function createClient() {
         remove(name: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value: '', ...options })
-          } catch (error) {
+          } catch {
             // The `cookies().set()` method can only be called in a Server Component or Route Handler
             // This error is typically not a problem if you're still rendering a server component that sets cookies
           }
