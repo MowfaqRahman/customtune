@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../lib/supabaseClient';
+import { useSession } from '../../components/supabase/SessionProvider';
 
 interface OrderItem {
   id: string;
@@ -24,21 +25,15 @@ const OrdersPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { session } = useSession();
 
   useEffect(() => {
     const fetchOrders = async () => {
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
-      if (userError) {
-        console.error("Error fetching user:", userError);
-        setError(userError.message);
-        setLoading(false);
-        router.push('/login'); // Redirect unauthenticated users
+      if (!session) {
+        router.push('/login');
         return;
       }
-      if (!user) {
-        router.push('/login'); // Redirect if no user
-        return;
-      }
+      const user = session.user;
 
       const { data: ordersData, error: ordersError } = await supabase
         .from('orders')
@@ -61,7 +56,7 @@ const OrdersPage = () => {
 
       if (ordersError) {
         console.error("Error fetching orders:", ordersError);
-        setError(ordersError.message || JSON.stringify(ordersError)); // Log full error object
+        setError(ordersError.message || JSON.stringify(ordersError));
       } else {
         setOrders(ordersData || []);
       }
@@ -69,7 +64,7 @@ const OrdersPage = () => {
     };
 
     fetchOrders();
-  }, [router]);
+  }, [session, router]);
 
   if (loading) {
     return <div className="container mx-auto p-4">Loading orders...</div>;

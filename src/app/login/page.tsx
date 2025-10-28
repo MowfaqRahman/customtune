@@ -1,13 +1,42 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../lib/supabaseClient';
+import { useSession } from '../../components/supabase/SessionProvider';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
+  const { session } = useSession();
+
+  useEffect(() => {
+    if (session) {
+      // If a session exists, check the user's role and redirect
+      const checkRoleAndRedirect = async () => {
+        const { data: profileData, error: profileError } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', session.user.id);
+
+        if (profileError) {
+          console.error("Error fetching profile on login page (useEffect):", profileError);
+          router.push('/');
+        } else if (profileData && profileData.length > 0) {
+          if (profileData[0]?.role === 'admin') {
+            router.push('/admin');
+          } else {
+            router.push('/');
+          }
+        } else {
+          console.log("No profile found for user on login page (useEffect):", session.user.id);
+          router.push('/');
+        }
+      };
+      checkRoleAndRedirect();
+    }
+  }, [session, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,31 +49,9 @@ const Login = () => {
     if (error) {
       setError(error.message);
     } else {
-      // Fetch user role after successful login
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: profileData, error: profileError } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', user.id);
-        
-        if (profileError) {
-          console.error("Error fetching profile after login (handleLogin):", profileError);
-          console.trace("Stack trace for profile fetch error after login");
-          router.push('/'); // Default to home page on profile fetch error
-        } else if (profileData && profileData.length > 0) {
-          if (profileData[0]?.role === 'admin') {
-            router.push('/admin');
-          } else {
-            router.push('/');
-          }
-        } else {
-          console.log("No profile found for user after login (handleLogin):", user.id);
-          router.push('/'); // Default to home page if profile not found
-        }
-      } else {
-        router.push('/'); // Default to home page if user object is somehow null
-      }
+      // After successful login, the onAuthStateChange listener in SessionProvider will update the session,
+      // and the useEffect above will handle the redirection.
+      // No direct getUser() call needed here.
     }
   };
 

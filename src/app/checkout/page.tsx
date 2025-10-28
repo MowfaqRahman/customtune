@@ -16,10 +16,12 @@ import { useCart } from "../../context/CartContext";
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../lib/supabaseClient';
 import Image from "next/image";
+import { useSession } from "../../components/supabase/SessionProvider";
 
 export default function CheckoutPage(): JSX.Element {
   const { cartItems, getTotalPrice, clearCart } = useCart();
   const router = useRouter();
+  const { session } = useSession();
   
   const [formData, setFormData] = useState({
     email: "",
@@ -47,9 +49,7 @@ export default function CheckoutPage(): JSX.Element {
 
   const handleTestOrder = async () => {
     try {
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
-      if (userError) throw userError;
-      if (!user) {
+      if (!session) {
         alert("You must be logged in to place an order.");
         router.push('/login');
         return;
@@ -59,7 +59,7 @@ export default function CheckoutPage(): JSX.Element {
       const { data: profileCheck, error: profileCheckError } = await supabase
         .from('profiles')
         .select('id')
-        .eq('id', user.id);
+        .eq('id', session.user.id);
 
       if (profileCheckError) {
         console.error("Error checking user profile before order placement:", profileCheckError);
@@ -82,7 +82,7 @@ export default function CheckoutPage(): JSX.Element {
       const { data: orderData, error: orderError } = await supabase
         .from('orders')
         .insert({
-          user_id: user.id,
+          user_id: session.user.id,
           total_amount: total,
           status: 'confirmed',
           order_date: new Date().toISOString(),

@@ -1,11 +1,8 @@
-"use client";
-
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { NavigationBar } from "../components/Navigation/NavigationBar";
-import { Footer } from "../components/Navigation/Footer";
-import { CartProvider } from "../context/CartContext";
-import { usePathname } from "next/navigation";
+import { createClient } from "@/lib/supabaseServer";
+import { SessionProvider } from "@/components/supabase/SessionProvider";
+import { LayoutClientWrapper } from "@/components/LayoutClientWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,29 +14,22 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-  const isAdminPage = pathname.startsWith("/admin");
-  const isLoginPage = pathname.startsWith("/login");
-  const isSignupPage = pathname.startsWith("/signup");
+  const supabase = createClient();
+  const { data: { session } } = await supabase.auth.getSession();
 
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <CartProvider>
-          <div className="bg-white w-full min-h-screen">
-            {!isAdminPage && !isLoginPage && !isSignupPage && <NavigationBar />}
-            <main>{children}</main>
-            {!isAdminPage && !isLoginPage && !isSignupPage && <Footer />}
-          </div>
-        </CartProvider>
+        <SessionProvider initialSession={session}>
+          <LayoutClientWrapper>{children}</LayoutClientWrapper>
+        </SessionProvider>
       </body>
     </html>
   );

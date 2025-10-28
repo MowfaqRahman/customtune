@@ -2,33 +2,27 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '../../lib/supabaseClient';
 import AdminNavigation from "@/components/admin/AdminNavigation";
 import { MenuIcon } from "lucide-react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State for mobile sidebar
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const checkAdmin = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const response = await fetch('/api/admin/auth');
+      const { user, role, error } = await response.json();
 
-      if (!user) {
+      if (error) {
+        console.error("Error fetching admin auth:", error);
         router.push('/login');
         return;
       }
 
-      const { data: profile, error } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single();
-
-      if (error || profile?.role !== 'admin') {
-        console.error("Admin access denied:", error || "Not an admin");
-        router.push('/'); // Redirect to home if not admin or error fetching profile
+      if (!user || role !== 'admin') {
+        router.push('/login');
         return;
       }
 

@@ -3,70 +3,71 @@ import { UserIcon, ChevronDownIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../lib/supabaseClient';
 import Link from 'next/link';
+import { useSession } from '../supabase/SessionProvider';
 import { User } from '@supabase/supabase-js';
 
 export const UserProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const { session } = useSession();
+  const [user, setUser] = useState<User | null>(session?.user || null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    const getProfile = async () => {
-      const { data: { user }, error: userSessionError } = await supabase.auth.getUser();
-      if (userSessionError) {
-        console.error("Error getting user session:", userSessionError);
-      }
-
-      if (user) {
+    if (session?.user) {
+      setUser(session.user);
+      const fetchRole = async () => {
         const { data: profileData, error: profileError } = await supabase
           .from('profiles')
           .select('role')
-          .eq('id', user.id);
+          .eq('id', session.user.id);
         
         if (profileError) {
-          console.error("Error fetching profile (getProfile): ", profileError);
+          console.error("Error fetching profile (initial load): ", profileError);
         } else if (profileData && profileData.length > 0) {
           setUserRole(profileData[0].role);
         } else {
-          console.log("No profile found for user (getProfile):", user.id);
+          console.log("No profile found for user (initial load):", session.user.id);
         }
-        setUser(user);
-      }
-      setLoading(false);
-    };
-    getProfile();
+      };
+      fetchRole();
+    } else {
+      setUser(null);
+      setUserRole(null);
+    }
+    setLoading(false);
 
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      if (newSession?.user) {
+        setUser(newSession.user);
         const fetchRole = async () => {
           const { data: profileData, error: profileError } = await supabase
             .from('profiles')
             .select('role')
-            .eq('id', session.user.id);
+            .eq('id', newSession.user.id);
 
           if (profileError) {
             console.error("Error fetching profile on auth change (fetchRole): ", profileError);
             console.log("Full error object on auth change:", JSON.stringify(profileError, null, 2));
-            console.trace("Stack trace for profile fetch error on auth change"); // Add this line
+            console.trace("Stack trace for profile fetch error on auth change");
           } else if (profileData && profileData.length > 0) {
             setUserRole(profileData[0].role);
           } else {
-            console.log("No profile found for user on auth change (fetchRole):", session.user.id);
+            console.log("No profile found for user on auth change (fetchRole):", newSession.user.id);
           }
         };
         fetchRole();
       } else {
+        setUser(null);
         setUserRole(null);
       }
-      setUser(session?.user || null);
     });
 
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, []);
+  }, [session]);
 
   const handleProfileClick = () => {
     if (!user) {

@@ -1,26 +1,23 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '../../lib/supabaseClient';
+import { useSession } from '../../components/supabase/SessionProvider';
 import { User } from '@supabase/supabase-js';
 
 const ProfilePage = () => {
+  const { session } = useSession();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        router.push('/login');
-      } else {
-        setUser(user);
-        setLoading(false);
-      }
-    };
-    getUser();
-  }, [router]);
+    if (!session) {
+      router.push('/login');
+    } else {
+      setUser(session.user);
+      setLoading(false);
+    }
+  }, [session, router]);
 
   if (loading) {
     return null; // Or a loading spinner

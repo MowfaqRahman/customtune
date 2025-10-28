@@ -1,13 +1,53 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../lib/supabaseClient';
+import { useSession } from '../../components/supabase/SessionProvider';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
+  const { session } = useSession();
+
+  useEffect(() => {
+    if (session) {
+      // If a session exists, check the user's role and redirect
+      const checkRoleAndRedirect = async () => {
+        // Create a profile for the new user if it doesn't exist
+        const { error: profileInsertError } = await supabase
+          .from('profiles')
+          .insert([
+            { id: session.user.id, username: session.user.email, role: 'user' } // Default role to 'user'
+          ]);
+
+        if (profileInsertError) {
+          console.error("Error creating profile for new user:", profileInsertError);
+        }
+
+        const { data: profileData, error: profileError } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', session.user.id);
+        
+        if (profileError) {
+          console.error("Error fetching profile after signup (useEffect):", profileError);
+          router.push('/');
+        } else if (profileData && profileData.length > 0) {
+          if (profileData[0]?.role === 'admin') {
+            router.push('/admin');
+          } else {
+            router.push('/');
+          }
+        } else {
+          console.log("No profile found for user after signup (useEffect):", session.user.id);
+          router.push('/');
+        }
+      };
+      checkRoleAndRedirect();
+    }
+  }, [session, router]);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,37 +60,9 @@ const Signup = () => {
     if (error) {
       setError(error.message);
     } else {
-      // Fetch user role after successful signup
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        // Create a profile for the new user if it doesn't exist
-        const { error: profileInsertError } = await supabase
-          .from('profiles')
-          .insert([
-            { id: user.id, username: user.email, role: 'user' } // Default role to 'user'
-          ]);
-
-        if (profileInsertError) {
-          console.error("Error creating profile for new user:", profileInsertError);
-        }
-
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', user.id)
-          .single();
-
-        if (profileError) {
-          console.error("Error fetching profile after signup:", profileError);
-          router.push('/'); // Default to home page on profile fetch error
-        } else if (profile?.role === 'admin') {
-          router.push('/admin');
-        } else {
-          router.push('/');
-        }
-      } else {
-        router.push('/'); // Default to home page if user object is somehow null
-      }
+      // After successful signup, the onAuthStateChange listener in SessionProvider will update the session,
+      // and the useEffect above will handle the redirection.
+      // No direct getUser() call needed here.
     }
   };
 
