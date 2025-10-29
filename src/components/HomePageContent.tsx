@@ -20,9 +20,9 @@ const categoryTabs = [
 ];
 
 interface Product {
-  id: number;
+  id: string;
   name: string;
-  category: string;
+  category: string | null;
   price: number;
   image: string;
   created_at: string; // Add created_at field
@@ -59,7 +59,7 @@ export const HomePageContent = () => {
     addToCart({
       id: product.id,
       name: product.name,
-      category: product.category,
+      category: product.category ?? "",
       price: product.price,
       image: product.image,
     });

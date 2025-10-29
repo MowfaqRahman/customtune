@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Footer = (): JSX.Element => {
+export const Footer = () => {
   return (
     <footer className="px-4 py-8 md:px-[100px] md:py-16 border-t">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 text-sm">

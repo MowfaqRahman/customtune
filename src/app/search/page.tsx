@@ -12,9 +12,9 @@ import { useCart } from '@/context/CartContext';
 import Image from 'next/image';
 
 interface Product {
-  id: number;
+  id: string;
   name: string;
-  category: string;
+  category: string | null;
   price: number;
   image: string;
   product_images?: { image_url: string }[];
@@ -62,7 +62,7 @@ export default function SearchResultsPage() {
     addToCart({
       id: product.id,
       name: product.name,
-      category: product.category,
+      category: product.category ?? "",
       price: product.price,
       image: product.image,
     });

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { UserProfileDropdown } from "./UserProfileDropdown";
+import { useSession } from "../supabase/SessionProvider"; // Import useSession
 import Image from "next/image";
 
 const navigationItems = [
@@ -20,6 +21,7 @@ const navigationItems = [
 export const NavigationBar = () => {
   const { getTotalItems } = useCart();
   const router = useRouter();
+  const { signOut } = useSession(); // Destructure signOut from useSession
   const [searchQuery, setSearchQuery] = useState("");
   const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // New state for mobile menu
@@ -158,7 +160,7 @@ export const NavigationBar = () => {
               </React.Fragment>
             ))}
             <Link href="/profile" className="[font-family:'Satoshi-Regular',Helvetica] font-normal text-black text-lg tracking-[0] leading-[normal] cursor-pointer py-2" onClick={() => setIsMobileMenuOpen(false)}>Profile</Link>
-            <button onClick={() => { handleSignOut(); setIsMobileMenuOpen(false); }} className="[font-family:'Satoshi-Regular',Helvetica] font-normal text-black text-lg tracking-[0] leading-[normal] cursor-pointer text-left py-2">Sign Out</button>
+            <button onClick={() => { signOut(); setIsMobileMenuOpen(false); }} className="[font-family:'Satoshi-Regular',Helvetica] font-normal text-black text-lg tracking-[0] leading-[normal] cursor-pointer text-left py-2">Sign Out</button>
           </nav>
         </div>
       )}

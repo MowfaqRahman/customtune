@@ -1,8 +1,8 @@
 import { supabase } from "@/lib/supabaseClient";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
+export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
   const { data, error } = await supabase.from("products").select("*").eq("id", id).single();
 
   if (error) {
@@ -16,8 +16,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
   return NextResponse.json(data);
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
+export async function PUT(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
   const { name, description, price } = await request.json();
 
   const { data, error } = await supabase.from("products").update({ name, description, price }).eq("id", id).select();
@@ -33,8 +33,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   return NextResponse.json(data[0]);
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
+export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
   const { error } = await supabase.from("products").delete().eq("id", id);
 
   if (error) {

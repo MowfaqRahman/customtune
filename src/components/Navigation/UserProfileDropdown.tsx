@@ -8,7 +8,7 @@ import { User } from '@supabase/supabase-js';
 
 export const UserProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { session } = useSession();
+  const { session, signOut } = useSession(); // Destructure signOut from useSession
   const [user, setUser] = useState<User | null>(session?.user || null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -77,12 +77,6 @@ export const UserProfileDropdown = () => {
     }
   };
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.push('/login');
-    setIsOpen(false);
-  };
-
   if (loading) {
     return null; // Or a loading spinner
   }
@@ -116,7 +110,7 @@ export const UserProfileDropdown = () => {
             </Link>
           )}
           <button
-            onClick={handleSignOut}
+            onClick={() => { signOut(); setIsOpen(false); }}
             className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
           >
             Sign out

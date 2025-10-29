@@ -13,6 +13,7 @@ interface Product {
   description: string | null;
   price: number;
   stock: number | null;
+  category: string | null;
   created_at: string;
   updated_at: string;
   product_images: { image_url: string }[];

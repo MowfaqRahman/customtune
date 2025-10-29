@@ -18,7 +18,7 @@ import { supabase } from '../../lib/supabaseClient';
 import Image from "next/image";
 import { useSession } from "../../components/supabase/SessionProvider";
 
-export default function CheckoutPage(): JSX.Element {
+export default function CheckoutPage() {
   const { cartItems, getTotalPrice, clearCart } = useCart();
   const router = useRouter();
   const { session } = useSession();
